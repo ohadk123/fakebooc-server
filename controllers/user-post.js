@@ -1,4 +1,4 @@
-import  userPostService from "../services/user-post";
+import  userPostService from "../services/user-post.js";
 
 async function addPost(req, res) {
     // Create the post

@@ -1,16 +1,15 @@
+import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import apiRouter from "./routes/api";
+import apiRouter from "./routes/api.js";
+import customEnv from "custom-env";
 
-require("custom-env").env(process.env.NODE_ENV, "./config");
+customEnv.env(process.env.NODE_ENV, "./config");
 console.log(process.env.CONNECTION_STRING);
 console.log(process.env.PORT);
 
-mongoose.connect(process.env.CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect(process.env.CONNECTION_STRING, {});
 
 const app = express();
 

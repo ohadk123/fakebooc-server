@@ -1,4 +1,4 @@
-import postService from "../services/post";
+import postService from "../services/post.js";
 
 async function updatePost(req, res) {
 

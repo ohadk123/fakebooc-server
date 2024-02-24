@@ -2,6 +2,7 @@
   "name": "fakebooc-server",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "SET NODE_ENV=local && node app.js",
