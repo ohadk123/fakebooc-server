@@ -1,4 +1,4 @@
-import Post from "../models/post.js";
+import Post from "../modules/post.js";
 
 async function updatePost(pid, content) {
 

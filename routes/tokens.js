@@ -2,6 +2,6 @@ import express from "express";
 const tokensRouter = express.Router();
 
 tokensRouter.route("/")
-.post();
+    .post();
 
 export default tokensRouter;

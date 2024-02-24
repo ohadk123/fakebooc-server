@@ -1,5 +1,5 @@
-import User from "../models/user.js";
-import Post from "../models/post.js";
+import User from "../modules/user.js";
+import Post from "../modules/post.js";
 
 async function addPost(uploader, content) {
     // Create the post

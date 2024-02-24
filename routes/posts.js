@@ -2,6 +2,6 @@ import express from "express";
 const postsRouter = express.Router();
 
 postsRouter.route("/")
-.get();
+    .get();
 
 export default postsRouter;

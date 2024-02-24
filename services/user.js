@@ -1,7 +1,6 @@
-import User from "../models/user.js";
+import User from "../modules/user.js";
 
 async function registerUser(username, displayName, password) {
-
 }
 
 async function getUserByUsername() {

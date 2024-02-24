@@ -2,8 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import apiRouter from "./routes/api.js";
 import customEnv from "custom-env";
+import apiRouter from "./routes/api.js";
 
 customEnv.env(process.env.NODE_ENV, "./config");
 console.log(process.env.CONNECTION_STRING);
