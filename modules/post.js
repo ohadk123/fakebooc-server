@@ -10,6 +10,9 @@ const Post = new Schema({
         type: String,
         requied: true
     },
+    contentImage : {
+        type: String
+    },
     date : {
         type: Date,
         default: Date.now
