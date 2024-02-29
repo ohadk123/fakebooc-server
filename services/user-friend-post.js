@@ -7,7 +7,8 @@ async function getPostsForFeed(username) {
     // 5 posts by not (username)'s friends
 }
 
-async function getUserPosts(connectedUsername, posterUsername) {
+async function getUserPosts(jwt, connectedUsername, posterUsername) {
+    // Authenticate jwt with connectedUsername
     // Only available to friends of (posterUsername)
 }
 
