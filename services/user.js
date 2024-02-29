@@ -12,4 +12,8 @@ async function updateUser(jwt, username, displayName, password) {
     // Authenticate jwt with username
 }
 
+async function loginUser(username, password) {
+    
+}
+
 export default {registerUser, getUserByUsername, updateUser};

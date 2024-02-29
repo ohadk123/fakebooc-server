@@ -12,4 +12,8 @@ async function updateUser(req, res) {
     
 }
 
+async function loginUser(req, res) {
+    
+}
+
 export default {registerUser, getUserByUsername, updateUser};

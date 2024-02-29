@@ -7,6 +7,7 @@ usersRouter.use("/:username/posts", usersPostsRouter);
 usersRouter.use("/:username/friends", usersFriendsRouter);
 
 usersRouter.route("/")
+    .get()
     .post();
 
 usersRouter.route("/:username")
