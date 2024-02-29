@@ -3,7 +3,7 @@ import User from "../modules/user.js";
 async function registerUser(username, displayName, password) {
 }
 
-async function getUserByUsername() {
+async function getUserByUsername(username) {
     
 }
 
