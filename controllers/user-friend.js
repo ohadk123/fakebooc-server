@@ -1,4 +1,4 @@
-import userFriendService from "../services/user-friend.js";
+import UserFriendService from "../services/user-friend.js";
 
 async function deleteUser(req, res) {
     // Remove user from friends' friends list

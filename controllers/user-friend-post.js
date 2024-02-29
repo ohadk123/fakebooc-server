@@ -1,4 +1,4 @@
-const userFriendPostService = require("../services/user-friend-post.js");
+const UserFriendPostService = require("../services/user-friend-post.js");
 
 async function getPostsForFeed(req, res) {
     // Should get 25 most recenetly uploaded posts

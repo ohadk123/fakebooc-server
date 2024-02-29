@@ -1,4 +1,4 @@
-import userService from "../services/user.js";
+import UserService from "../services/user.js";
 
 async function registerUser(req, res) {
 
