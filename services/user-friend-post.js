@@ -1,5 +1,5 @@
-import User from "../modules/user.js";
-import Post from "../modules/post.js";
+import User from "../models/user.js";
+import Post from "../models/post.js";
 
 async function getPostsForFeed(username) {
     // Should get 25 most recenetly uploaded posts
