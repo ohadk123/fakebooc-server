@@ -1,7 +1,7 @@
 import Post from "../models/post.js";
 
-async function updatePost(jwt, username, pid, content) {
-    // Authenticate jwt with username
+async function updatePost(pid, content, contentImage) {
+
 }
 
 export default {updatePost};
