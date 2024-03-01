@@ -8,7 +8,7 @@ const Comment = new Schema({
     },
     content : {
         type: String,
-        requied: true
+        required: true
     },
     date : {
         type: Date,

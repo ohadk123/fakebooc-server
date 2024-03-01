@@ -1,14 +1,12 @@
 import User from "../models/user.js";
 import Post from "../models/post.js";
 
-async function addPost(jwt, uploader, content) {
-    // Authenticate jwt with username
+async function addPost(uploader, content, contentImage) {
     // Create the post
     // Add post to the uploader's post list
 }
 
-async function removePost(jwt, username, pid) {
-    // Authenticate jwt with username
+async function removePost(pid) {
     // Remove from uploader's posts list
     // Delete post
 }
