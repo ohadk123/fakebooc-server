@@ -106,6 +106,15 @@ async function updateUser(username, newDisplayName, newProfileImage) {
     return await getUser(username);
 }
 
+async function verifyLogin(username, password) {
+    const user = await getUser(username);
+    if (!user)
+        return false;
+    if (user.password !== password)
+        return false;
+    return true;
+}
+
 async function getUser(username) {
     return await User.findById(username);
 }
@@ -129,4 +138,4 @@ async function addUser(username, displayName, profileImage, password) {
     return await user.save();
 }
 
-export default {registerUser, getUserInformation, updateUser};
+export default {registerUser, getUserInformation, updateUser, verifyLogin};

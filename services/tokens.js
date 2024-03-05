@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import User from "../models/user.js";
+
 const key = "Fakebooc's super secret key, please don't hack UwU";
 
 function createToken(username) {

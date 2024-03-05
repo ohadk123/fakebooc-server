@@ -10,7 +10,6 @@ usersRouter.use("/:username/posts", usersPostsRouter); // TODO: add token verifi
 usersRouter.use("/:username/friends", usersFriendsRouter); // TODO: add token verification
 
 usersRouter.route("/")
-    .get(TokenController.createToken)
     .post(UserController.registerUser);
 
 usersRouter.route("/:username")

@@ -1,8 +1,16 @@
 import TokenService from "../services/tokens.js";
+import UserService from "../services/user.js";
 
-function createToken(req, res) {
+async function createToken(req, res) {
+    const verifyLogin = await UserService.verifyLogin(
+        req.body.username,
+        req.body.password
+    );
+    if (!verifyLogin)
+        return res.status(404).json({errors: ["Incorrect username or password"]});
+
     const token = TokenService.createToken(req.body.username);
-    res.json({token:token});
+    res.status(200).json({token:token});
 }
 
 function verifyToken(req, res, next) {
@@ -13,11 +21,10 @@ function verifyToken(req, res, next) {
             req.user = data.username;
             return next();
         } catch (error) {
-            return res.status(401).send("Invalid Token");
+            return res.status(401).json({errors: ["Invalid Token"]});
         }
-    } else {
-        return res.status(403).send('Token required');
     }
+    res.status(403).json({errors: ["Token required"]});
 }
 
 export default {createToken, verifyToken};
