@@ -10,8 +10,7 @@ async function registerUser(req, res) {
         req.body.password
     );
     
-    const errors = registerData.errors;
-    if (errors)
+    if (registerData.errors)
         res.status(409);
     else
         res.status(200);
