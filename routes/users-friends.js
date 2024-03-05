@@ -1,6 +1,6 @@
 import express from "express";
 import UserFriendController from "../controllers/user-friend.js"
-const usersFriendsRouter = express.Router();
+const usersFriendsRouter = express.Router({mergeParams: true});
 
 usersFriendsRouter.route("/")
     .get(UserFriendController.getUserFriends)

@@ -4,17 +4,17 @@ import usersFriendsRouter from "./users-friends.js";
 import UserController from "../controllers/user.js"
 import UserFriendController from "../controllers/user-friend.js"
 import TokenController from "../controllers/tokens.js";
-const usersRouter = express.Router();
+const usersRouter = express.Router({mergeParams: true});
 
-usersRouter.use("/:username/posts", usersPostsRouter); // TODO: add token verification
-usersRouter.use("/:username/friends", usersFriendsRouter); // TODO: add token verification
+usersRouter.use("/:username/posts", TokenController.verifyToken, usersPostsRouter);
+usersRouter.use("/:username/friends", TokenController.verifyToken, usersFriendsRouter);
 
 usersRouter.route("/")
     .post(UserController.registerUser);
 
 usersRouter.route("/:username")
-    .get(UserController.getUserInformation) // TODO: add token verification
-    .put(UserController.updateUser) // TODO: add token verification
-    .delete(UserFriendController.deleteUser); // TODO: add token verification
+    .get(TokenController.verifyToken, UserController.getUserInformation)
+    .put(TokenController.verifyToken, UserController.updateUser)
+    .delete(TokenController.verifyToken, UserFriendController.deleteUser);
 
 export default usersRouter
