@@ -7,7 +7,7 @@ const Comment = new Schema({
         ref: "Post"
     },
     uploader : {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         ref: "User"
     },
     content : {
@@ -19,7 +19,7 @@ const Comment = new Schema({
         default: Date.now
     },
     likes : [{
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         ref: "User"
     }]
 });
