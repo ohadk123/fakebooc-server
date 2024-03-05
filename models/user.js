@@ -19,7 +19,7 @@ const User = new Schema({
         ref: "User"
     }],
     friendReq : [{
-        type: Schema.Types.ObjectId, 
+        type: Schema.Types.String, 
         ref: "User"
     }]
 });
