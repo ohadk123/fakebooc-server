@@ -31,7 +31,7 @@ async function getUserInformation(req, res) {
     if (!user)
         return res.status(404).json({errors: ["User not found"]});
 
-    res.json(user);
+    res.status(200).json(user);
 }
 
 async function updateUser(req, res) {
@@ -42,7 +42,7 @@ async function updateUser(req, res) {
     if (!updatedUser)
         return res.status(404).json({errors: ["User not found"]});
 
-    res.json(updatedUser);
+    res.status(200).json(updatedUser);
 }
 
 export default {registerUser, getUserInformation, updateUser};
