@@ -1,5 +1,5 @@
-import mongoose from "mongoose"
 import User from "../models/user.js";
+import getErrorJson from "./error.js";
 
 /**
  * @returns new user created
@@ -57,7 +57,7 @@ async function registerUser(username, displayName, profileImage, password) {
         errors.push("");
 
     if (hasErrors)
-        return {errors: errors};
+        return getErrorJson(409, errors);
 
     // TODO: Add user to db
     return await addUser(
@@ -71,7 +71,7 @@ async function registerUser(username, displayName, profileImage, password) {
 async function getUserInformation(username) {
     const user = await getUser(username);
     if (!user)
-        return;
+        return getErrorJson(404, ["User not found"]);
 
     return {
         username: user._id,
@@ -88,7 +88,7 @@ async function getUserInformation(username) {
 async function updateUser(username, newDisplayName, newProfileImage) {
     const user = await getUser(username);
     if (!user)
-        return;
+        return getErrorJson(404, ["User not found"]);
 
     let displayName = user.displayName;
     let profileImage = user.profileImage;
@@ -105,6 +105,10 @@ async function updateUser(username, newDisplayName, newProfileImage) {
 
     return await getUser(username);
 }
+
+export default {registerUser, getUserInformation, updateUser, verifyLogin};
+
+//-----------------------------------------------------------------------------------
 
 async function verifyLogin(username, password) {
     const user = await getUser(username);
@@ -137,5 +141,3 @@ async function addUser(username, displayName, profileImage, password) {
     });
     return await user.save();
 }
-
-export default {registerUser, getUserInformation, updateUser, verifyLogin};

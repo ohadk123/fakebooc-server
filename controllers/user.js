@@ -1,4 +1,5 @@
 import UserService from "../services/user.js";
+import runController from "./runner.js";
 
 // Success - 200 and user data
 // Fail - 409 and errors list
@@ -9,13 +10,8 @@ async function registerUser(req, res) {
         req.body.profileImage,
         req.body.password
     );
-    
-    if (registerData.errors)
-        res.status(409);
-    else
-        res.status(200);
 
-    res.json(registerData);
+    runController("", "", registerData, res);
 }
 
 /**
@@ -23,14 +19,11 @@ async function registerUser(req, res) {
  * throws 404 if user is not found
  */ 
 async function getUserInformation(req, res) {
-    const user = await UserService.getUserInformation(
+    const getUserInformationData = await UserService.getUserInformation(
         req.params.username
     );
 
-    if (!user)
-        return res.status(404).json({errors: ["User not found"]});
-
-    res.status(200).json(user);
+    runController("", "", getUserInformationData, res);
 }
 
 async function updateUser(req, res) {
