@@ -1,29 +1,59 @@
 import UserFriendService from "../services/user-friend.js";
+import runController from "./runner.js";
 
 // delete
 async function deleteUser(req, res) {
-    // Remove user from friends' friends list
-    // Remove user posts
+    const deleteUserData = await UserFriendService.deleteUser(
+        req.params.username
+    );
+
+    runController(req.user, req.params.username, deleteUserData, res);
 }
 
 // delete
 async function removeFriend(req, res) {
-    // Remove from each other's friends list
+    const removeFriendData = await UserFriendService.removeFriend(
+        req.params.username,
+        req.params.fusername
+    );
+
+    runController(req.user, req.params.username, removeFriendData, res);
 }
 
 // get
 async function getUserFriends(req, res) {
-    // Only available to friends of (requestedUsername)
+    const getUserFriendsData = await UserFriendService.getUserFriends(
+        req.user,
+        req.params.username
+    );
+
+    runController("", "", getUserFriendsData, res);
 }
 
 // post
 async function sendFriendRequest(req, res) {
-    
+    const sendFriendRequestData = await UserFriendService.sendFriendRequest(
+        req.user,
+        req.params.username
+    );
+
+    runController("", "", sendFriendRequestData, res);
 }
 
 // patch
 async function acceptRequest(req, res) {
-    // Add to each other's friends list
+    if (req.params.username !== req.user)
+        return res.status(401).json({errors: ["Unauthorized access"]});
+
+    const acceptRequestData = await UserFriendService.acceptRequest(
+        req.params.username,
+        req.params.fusername
+    );
+
+    if (acceptRequestData.status)
+        return res.status(acceptRequestData.status).json({errors: acceptRequestData.errors});
+
+    res.status(200).json(acceptRequestData);
 }
 
 export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};
