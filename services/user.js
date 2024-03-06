@@ -11,21 +11,23 @@ import getErrorJson from "./error.js";
  * On success - User information as it shows on db
  * if any input errors accrued -
  *      409,
- *      errors[0]: "Username already in use" - If username already exists in the db
+ *      errors[0]: "Username already in use"/"Please enter a unique username" - If username already exists in the db/If username is empty
  *      errors[1]: A concatinated string of password errors
  *      errors[2]: "Passwords don't match" - If password confirmation doesn't match password
- *      errors[3]: "Please enter a display name" - If displayName is null
- *      errors[4]: "Please upload a profile picture" - If profileImage is null
+ *      errors[3]: "Please enter a display name" - If displayName is empty
+ *      errors[4]: "Please upload a profile picture" - If profileImage is empty
  */
 async function registerUser(username, displayName, profileImage, password, cPassword) {
     let hasErrors = false;
     let errors = [];
-    const user = await getUser(username);
-    if (user) {
+
+    if (!username || username === "") {
+        errors.push("Please enter a unique username");
+        hasErrors = true;
+    } else if (await getUser(username)) {
         errors.push("Username already in use");
         hasErrors = true;
-    }
-    else
+    } else
         errors.push("");
 
     const hasUpperCase = /[A-Z]/.test(password);
@@ -55,14 +57,14 @@ async function registerUser(username, displayName, profileImage, password, cPass
     else
         errors.push("");
 
-    if (!displayName) {
+    if (!displayName || displayName === "") {
         errors.push("Please enter a display name");
         hasErrors = true;
     }
     else
         errors.push("");
 
-    if (!profileImage) {
+    if (!profileImage || profileImage === "") {
         errors.push("Please upload a profile picture");
         hasErrors = true;
     }
