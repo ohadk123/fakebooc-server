@@ -7,7 +7,7 @@ async function createToken(req, res) {
         req.body.password
     );
     
-    runController("", "", createTokenData, res);
+    runController(createTokenData, res);
 }
 
 function verifyToken(req, res, next) {
@@ -20,7 +20,7 @@ function verifyToken(req, res, next) {
         return next();
     }
 
-    runController("", "", verifyTokenData, res);
+    runController(verifyTokenData, res);
 }
 
 export default {createToken, verifyToken};

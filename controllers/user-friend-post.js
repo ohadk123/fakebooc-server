@@ -7,7 +7,7 @@ async function getPostsForFeed(req, res) {
         req.user
     );
 
-    runController("", "", getPostsForFeedData, res);
+    runController(getPostsForFeedData, res);
 }
 
 // get
@@ -17,7 +17,7 @@ async function getUserPosts(req, res) {
         req.params.username
     );
 
-    runController("", "", getUserPostsData, res);
+    runController(getUserPostsData, res);
 }
 
 export default {getPostsForFeed, getUserPosts};
