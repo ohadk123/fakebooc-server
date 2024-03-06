@@ -106,20 +106,20 @@ async function updateUser(username, newDisplayName, newProfileImage) {
     return await getUser(username);
 }
 
+async function verifyLogin(username, password) {
+    const user = await getUser(username);
+    if (!user)
+        return false;
+    if (user.password !== password)
+        return false;
+    return true;
+}
+
 export default {registerUser, getUserInformation, updateUser, verifyLogin};
 
 //---------------------------------------------------------------------------------------------------------
 
 { // Helper Functions
-    async function verifyLogin(username, password) {
-        const user = await getUser(username);
-        if (!user)
-            return false;
-        if (user.password !== password)
-            return false;
-        return true;
-    }
-
     async function getUser(username) {
         return await User.findById(username);
     }
