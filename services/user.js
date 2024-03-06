@@ -1,10 +1,11 @@
 import User from "../models/user.js";
 import getErrorJson from "./error.js";
-import TokenService from "./tokens.js";
 
 /**
- * @returns new user created
+ * @returns:
+ * On success - The user as it shows in the db
  * if any verification error accrued:
+ * status 409
  * errors[0]: username error
  * errors[1]: password error
  * errors[2]: displayName error
@@ -60,7 +61,6 @@ async function registerUser(username, displayName, profileImage, password) {
     if (hasErrors)
         return getErrorJson(409, errors);
 
-    // TODO: Add user to db
     return await addUser(
         username,
         displayName,
@@ -69,6 +69,14 @@ async function registerUser(username, displayName, profileImage, password) {
     );
 }
 
+/**
+ * Updates a user in db, changes fields displayName and profileImage
+ * Only if they are not null
+ * @returns:
+ * On success - Updated user's information
+ * On failure:
+ *      404 "User not found" error
+ */
 async function getUserInformation(username) {
     const user = await getUser(username);
     if (!user)
@@ -84,7 +92,10 @@ async function getUserInformation(username) {
 /**
  * Updates a user in db, changes fields displayName and profileImage
  * Only if they are not null
- * @returns Updated user, null if user doesn't exist
+ * @returns:
+ * On success - Updated user's information
+ * On failure:
+ *      404 "User not found" error
  */
 async function updateUser(username, newDisplayName, newProfileImage) {
     const user = await getUser(username);
@@ -104,7 +115,11 @@ async function updateUser(username, newDisplayName, newProfileImage) {
         profileImage: profileImage
     });
 
-    return await getUser(username);
+    return {
+        username: username,
+        displayName: newDisplayName,
+        profileImage: newProfileImage
+    };
 }
 
 export default {registerUser, getUserInformation, updateUser};
@@ -114,16 +129,7 @@ async function getUser(username) {
     return await User.findById(username);
 }
 
-/**
- * Adds a user to the database.
- * @param {String} username - A unique username for the user.
- * @param {String} displayName - A display name for the platform.
- * @param {String} profileImage - A profile picture encoded in base64
- * @param {String} password - A secret password used to login
- * @returns A json of the new user that was created.
- */
 async function addUser(username, displayName, profileImage, password) {
-    // TODO: handle errors
     const user = new User({
         _id: username,
         displayName: displayName,
