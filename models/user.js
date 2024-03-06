@@ -2,34 +2,25 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const User = new Schema({
-    username : {
-        type: String,
-        required: true,
-        unique: true
-    },
+    _id : String,
     displayName : {
         type: String,
         required: true
     },
     profileImage : {
-        type: String,
-        required: true
+        type: String
     },
     password : {
         type: String,
         required: true
     },
     friends : [{
-        type: Schema.Types.ObjectId, 
+        type: Schema.Types.String, 
         ref: "User"
     }],
     friendReq : [{
-        type: Schema.Types.ObjectId, 
+        type: Schema.Types.String, 
         ref: "User"
-    }],
-    posts : [{
-        type: Schema.Types.ObjectId,
-        ref: "Post"
     }]
 });
 

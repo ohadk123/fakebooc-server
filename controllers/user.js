@@ -1,23 +1,43 @@
 import UserService from "../services/user.js";
+import Runner from "./runner.js";
 
-//post
+// Success - 200 and user data
+// Fail - 409 and errors list
 async function registerUser(req, res) {
+    const registerData = await UserService.registerUser(
+        req.body.username,
+        req.body.displayName,
+        req.body.profileImage,
+        req.body.password,
+        req.body.cPassword
+    );
 
+    Runner.runController(registerData, res);
 }
 
-// get
-async function getUserByUsername(req, res) {
-    
+/**
+ * find user by /:username
+ * throws 404 if user is not found
+ */ 
+async function getUserInformation(req, res) {
+    const getUserInformationData = await UserService.getUserInformation(
+        req.params.username
+    );
+
+    Runner.runController(getUserInformationData, res);
 }
 
-// put
 async function updateUser(req, res) {
-    
+    let updateUserData = Runner.authorizeRequest(req.user, req.params.username);
+
+    if (!updateUserData)
+        updateUserData = await UserService.updateUser(
+            req.params.username,
+            req.body.displayName,
+            req.body.profileImage
+        );
+
+        Runner.runController(updateUserData, res);
 }
 
-// get
-async function loginUser(req, res) {
-    
-}
-
-export default {registerUser, getUserByUsername, updateUser, loginUser};
+export default {registerUser, getUserInformation, updateUser};

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Post = new Schema({
     uploader : {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String, 
         ref: "User"
     },
     content : {
@@ -18,7 +18,7 @@ const Post = new Schema({
         default: Date.now
     },
     likes : [{
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         ref: "User"
     }]
 });

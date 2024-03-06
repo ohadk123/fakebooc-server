@@ -1,15 +1,31 @@
 import  UserPostService from "../services/user-post.js";
+import Runner from "./runner.js";
 
 // post
 async function addPost(req, res) {
-    // Create the post
-    // Add post to the uploader's post list
+    let addPostData = Runner.authorizeRequest(req.user, req.params.username);
+
+    if (!addPostData)
+        addPostData = await UserPostService.addPost(
+            req.params.username,
+            req.body.content,
+            req.body.contentImage
+        );
+    
+        Runner.runController(addPostData, res);
 }
 
 // delete
 async function removePost(req, res) {
-    // Remove from uploader's posts list
-    // Delete post
+    let removePostData = Runner.authorizeRequest(req.user, req.params.username);
+
+    if (!removePostData)
+        removePostData = await UserPostService.removePost(
+            req.params.username,
+            req.params.pid
+        );
+
+        Runner.runController(removePostData, res);
 }
 
 export default {addPost, removePost};

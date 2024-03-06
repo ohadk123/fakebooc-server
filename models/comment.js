@@ -2,8 +2,12 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Comment = new Schema({
-    uploader : {
+    post : {
         type: Schema.Types.ObjectId,
+        ref: "Post"
+    },
+    uploader : {
+        type: Schema.Types.String,
         ref: "User"
     },
     content : {
@@ -15,7 +19,7 @@ const Comment = new Schema({
         default: Date.now
     },
     likes : [{
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         ref: "User"
     }]
 });
