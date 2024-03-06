@@ -5,7 +5,7 @@ async function addPost(uploader, content, contentImage) {
     if (!content)
         return getErrorJson(400, ["Post must have some content"]);
 
-    const newPost = new Post({
+    const newPost = await new Post({
         uploader: uploader,
         content: content,
         contentImage: contentImage
