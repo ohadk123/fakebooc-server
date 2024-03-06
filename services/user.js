@@ -118,28 +118,25 @@ async function verifyLogin(username, password) {
 export default {registerUser, getUserInformation, updateUser, verifyLogin};
 
 //---------------------------------------------------------------------------------------------------------
+async function getUser(username) {
+    return await User.findById(username);
+}
 
-{ // Helper Functions
-    async function getUser(username) {
-        return await User.findById(username);
-    }
-
-    /**
-     * Adds a user to the database.
-     * @param {String} username - A unique username for the user.
-     * @param {String} displayName - A display name for the platform.
-     * @param {String} profileImage - A profile picture encoded in base64
-     * @param {String} password - A secret password used to login
-     * @returns A json of the new user that was created.
-     */
-    async function addUser(username, displayName, profileImage, password) {
-        // TODO: handle errors
-        const user = new User({
-            _id: username,
-            displayName: displayName,
-            profileImage: profileImage,
-            password: password
-        });
-        return await user.save();
-    }
+/**
+ * Adds a user to the database.
+ * @param {String} username - A unique username for the user.
+ * @param {String} displayName - A display name for the platform.
+ * @param {String} profileImage - A profile picture encoded in base64
+ * @param {String} password - A secret password used to login
+ * @returns A json of the new user that was created.
+ */
+async function addUser(username, displayName, profileImage, password) {
+    // TODO: handle errors
+    const user = new User({
+        _id: username,
+        displayName: displayName,
+        profileImage: profileImage,
+        password: password
+    });
+    return await user.save();
 }
