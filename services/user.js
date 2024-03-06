@@ -17,69 +17,59 @@ import getErrorJson from "./error.js";
  *      errors[3]: "Please enter a display name" - If displayName is empty
  *      errors[4]: "Please upload a profile picture" - If profileImage is empty
  */
-async function registerUser(username, displayName, profileImage, password, cPassword) {
-    let hasErrors = false;
-    let errors = [];
+async function registerUser(
+  username,
+  displayName,
+  profileImage,
+  password,
+  cPassword
+) {
+  let hasErrors = false;
+  let errors = [];
 
-    if (!username) {
-        errors.push("Please enter a unique username");
-        hasErrors = true;
-    } else if (await getUser(username)) {
-        errors.push("Username already in use");
-        hasErrors = true;
-    } else
-        errors.push("");
+  if (!username) {
+    errors.push("Please enter a unique username");
+    hasErrors = true;
+  } else if (await getUser(username)) {
+    errors.push("Username already in use");
+    hasErrors = true;
+  } else errors.push("");
 
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+{}[\]:;<>,.?~-]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const isLengthValid = password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+{}[\]:;<>,.?~-]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const isLengthValid = typeof password !== "undefined" && password.length >= 8;
 
-    let passwordErrors = "";
-    if (!hasUpperCase)
-        passwordErrors += "Password must have an uppercase letter\n";
-    if (!hasSpecialChar)
-        passwordErrors += "Password must have a special character\n";
-    if (!hasNumber)
-        passwordErrors += "Password must had a number\n";
-    if (!isLengthValid)
-        passwordErrors += "Password must be at least 8 characters long\n";
+  let passwordErrors = "";
+  if (!hasUpperCase)
+    passwordErrors += "Password must have an uppercase letter\n";
+  if (!hasSpecialChar)
+    passwordErrors += "Password must have a special character\n";
+  if (!hasNumber) passwordErrors += "Password must had a number\n";
+  if (!isLengthValid)
+    passwordErrors += "Password must be at least 8 characters long\n";
 
-    if (passwordErrors !== "") {
-        errors.push(passwordErrors);
-        hasErrors = true;
-    }
-    else
-        errors.push("");
+  if (passwordErrors !== "") {
+    errors.push(passwordErrors);
+    hasErrors = true;
+  } else errors.push("");
 
-    if (cPassword !== password)
-        errors.push("Passwords don't match");
-    else
-        errors.push("");
+  if (cPassword !== password) errors.push("Passwords don't match");
+  else errors.push("");
 
-    if (!displayName) {
-        errors.push("Please enter a display name");
-        hasErrors = true;
-    }
-    else
-        errors.push("");
+  if (!displayName) {
+    errors.push("Please enter a display name");
+    hasErrors = true;
+  } else errors.push("");
 
-    if (!profileImage) {
-        errors.push("Please upload a profile picture");
-        hasErrors = true;
-    }
-    else
-        errors.push("");
+  if (!profileImage) {
+    errors.push("Please upload a profile picture");
+    hasErrors = true;
+  } else errors.push("");
 
-    if (hasErrors)
-        return getErrorJson(409, errors);
+  if (hasErrors) return getErrorJson(409, errors);
 
-    return await addUser(
-        username,
-        displayName,
-        profileImage,
-        password
-    );
+  return await addUser(username, displayName, profileImage, password);
 }
 
 /**
@@ -91,15 +81,14 @@ async function registerUser(username, displayName, profileImage, password, cPass
  *      404 "User not found" error
  */
 async function getUserInformation(username) {
-    const user = await getUser(username);
-    if (!user)
-        return getErrorJson(404, ["User not found"]);
+  const user = await getUser(username);
+  if (!user) return getErrorJson(404, ["User not found"]);
 
-    return {
-        username: user._id,
-        displayName: user.displayName,
-        profileImage: user.profileImage
-    };
+  return {
+    username: user._id,
+    displayName: user.displayName,
+    profileImage: user.profileImage,
+  };
 }
 
 /**
@@ -114,43 +103,42 @@ async function getUserInformation(username) {
  *      404 "User not found" error
  */
 async function updateUser(username, newDisplayName, newProfileImage) {
-    const user = await getUser(username);
-    if (!user)
-        return getErrorJson(404, ["User not found"]);
+  const user = await getUser(username);
+  if (!user) return getErrorJson(404, ["User not found"]);
 
-    let displayName = user.displayName;
-    let profileImage = user.profileImage;
-    
-    if (newDisplayName)
-        displayName = newDisplayName;
-    if (newProfileImage)
-        profileImage = newProfileImage;
+  let displayName = user.displayName;
+  let profileImage = user.profileImage;
 
-    await User.findByIdAndUpdate(username, {
-        displayName: displayName,
-        profileImage: profileImage
-    });
+  if (newDisplayName) displayName = newDisplayName;
+  if (newProfileImage) profileImage = newProfileImage;
 
-    return {
-        username: username,
-        displayName: displayName,
-        profileImage: profileImage
-    };
+  await User.findByIdAndUpdate(username, {
+    displayName: displayName,
+    profileImage: profileImage,
+  });
+
+  return {
+    username: username,
+    displayName: displayName,
+    profileImage: profileImage,
+  };
 }
 
-export default {registerUser, getUserInformation, updateUser};
+export default { registerUser, getUserInformation, updateUser };
 
 //---------------------------------------------------------------------------------------------------------
 async function getUser(username) {
-    return await User.findById(username);
+  return await User.findById(username);
 }
 
 async function addUser(username, displayName, profileImage, password) {
-    const user = new User({
-        _id: username,
-        displayName: displayName,
-        profileImage: profileImage,
-        password: password
-    });
-    return await user.save();
+  const user = new User({
+    _id: username,
+    displayName: displayName,
+    profileImage: profileImage,
+    password: password,
+  });
+  //todo doesnt work
+  console.log(user);
+  return await user.save();
 }
