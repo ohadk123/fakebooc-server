@@ -6,10 +6,11 @@ async function updatePost(req, res) {
     let updatePostData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!updatePostData)
-        updatePostData = PostService.updatePost(
+        updatePostData = await PostService.updatePost(
+            req.params.username,
             req.params.pid,
-            req.params.content,
-            req.params.contentImage
+            req.body.content,
+            req.body.contentImage
         );
 
         Runner.runController(updatePostData, res);

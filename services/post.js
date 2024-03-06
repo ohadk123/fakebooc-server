@@ -12,25 +12,32 @@ import getErrorJson from "./error.js";
  * On failure -
  *      404, "Post not found" - If the post doesn't exist in db
  */
-async function updatePost(pid, newContent, newContentImage) {
-    const post = await Post.findById(pid);
-    if (!post)
+async function updatePost(loggedUsername, pid, newContent, newContentImage) {
+    try {
+        const post = await Post.findById(pid);
+        if (!post)
+            return getErrorJson(404, ["Post not found"]);
+
+        if (post.uploader !== loggedUsername)
+            return getErrorJson(403, ["Forbidden access"]);
+
+        let content = post.content;
+        let contentImage = post.contentImage;
+
+        if (newContent)
+            content = newContent;
+        if (newContentImage)
+            contentImage = newContentImage;
+
+        await Post.findByIdAndUpdate(pid, {
+            content: content,
+            contentImage: contentImage
+        });
+
+        return await Post.findById(pid);
+    } catch (error) {
         return getErrorJson(404, ["Post not found"]);
-
-    let content = post.content;
-    let contentImage = post.contentImage;
-
-    if (newContent)
-        content = newContent;
-    if (newContentImage)
-        contentImage = newContentImage;
-
-    await Post.findByIdAndUpdate(pid, {
-        content: content,
-        contentImage: contentImage
-    });
-
-    return await Post.findById(pid);
+    }
 }
 
 export default {updatePost};
