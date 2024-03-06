@@ -6,8 +6,8 @@ import UserFriendController from "../controllers/user-friend.js"
 import TokenController from "../controllers/tokens.js";
 const usersRouter = express.Router({mergeParams: true});
 
-usersRouter.use("/:username/posts", TokenController.verifyToken, usersPostsRouter);
-usersRouter.use("/:username/friends", TokenController.verifyToken, usersFriendsRouter);
+usersRouter.use("/:username/posts", usersPostsRouter);
+usersRouter.use("/:username/friends", usersFriendsRouter);
 
 usersRouter.route("/")
     .post(UserController.registerUser);

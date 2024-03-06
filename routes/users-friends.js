@@ -3,11 +3,11 @@ import UserFriendController from "../controllers/user-friend.js"
 const usersFriendsRouter = express.Router({mergeParams: true});
 
 usersFriendsRouter.route("/")
-    .get(UserFriendController.getUserFriends)
-    .post(UserFriendController.sendFriendRequest);
+    .get(TokenController.verifyToken, UserFriendController.getUserFriends)
+    .post(TokenController.verifyToken, UserFriendController.sendFriendRequest);
 
 usersFriendsRouter.route("/:fusername")
-    .patch(UserFriendController.acceptRequest)
-    .delete(UserFriendController.removeFriend);
+    .patch(TokenController.verifyToken, UserFriendController.acceptRequest)
+    .delete(TokenController.verifyToken, UserFriendController.removeFriend);
 
 export default usersFriendsRouter
