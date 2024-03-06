@@ -10,9 +10,13 @@ import getErrorJson from "./error.js";
  *      404, "Comment not found" - If cid doesn't exist in db
  */
 async function getLikes(cid) {
-    const comment = await Comment.findById(cid);
-    if (!comment)
+    try {
+        const comment = await Comment.findById(cid);
+        if (!comment)
+            return getErrorJson(404, ["Comment not found"]);
+    } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
+    }
 
     return comment.likes
 }

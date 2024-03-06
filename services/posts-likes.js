@@ -10,9 +10,13 @@ import getErrorJson from "./error.js";
  *      404, "Post not found" - If pid doesn't exist in db
  */
 async function getLikes(pid) {
-    const post = await Post.findById(pid);
-    if (!post)
+    try {
+        const post = await Post.findById(pid);
+        if (!post)
+            return getErrorJson(404, ["Post not found"]);
+    } catch (error) {
         return getErrorJson(404, ["Post not found"]);
+    }
 
     return post.likes
 }
