@@ -13,15 +13,16 @@ import getErrorJson from "./error.js";
  *      409,
  *      errors[0]: "Username already in user" - If username already exists in the db
  *      errors[1]: A concatinated string of password errors
- *      errors[2]: "Please enter a display name" - If displayName is null
- *      errors[3]: "Please upload a profile picture" - If profileImage is null
+ *      errors[2]: "Passwords don't match" - If password confirmation doesn't match password
+ *      errors[3]: "Please enter a display name" - If displayName is null
+ *      errors[4]: "Please upload a profile picture" - If profileImage is null
  */
-async function registerUser(username, displayName, profileImage, password) {
+async function registerUser(username, displayName, profileImage, password, cPassword) {
     let hasErrors = false;
     let errors = [];
     const user = await getUser(username);
     if (user) {
-        errors.push("Username already in user");
+        errors.push("Username already in use");
         hasErrors = true;
     }
     else
@@ -46,6 +47,11 @@ async function registerUser(username, displayName, profileImage, password) {
         errors.push(passwordErrors);
         hasErrors = true;
     }
+    else
+        errors.push("");
+
+    if (cPassword !== password)
+        errors.push("Passwords don't match");
     else
         errors.push("");
 
