@@ -8,7 +8,8 @@ async function registerUser(req, res) {
         req.body.username,
         req.body.displayName,
         req.body.profileImage,
-        req.body.password
+        req.body.password,
+        req.body.cPassword
     );
 
     Runner.runController(registerData, res);
