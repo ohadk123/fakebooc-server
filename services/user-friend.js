@@ -40,11 +40,7 @@ async function removeFriend(username1, username2) {
     if (usersExists)
         return usersExists;
 
-    const user1 = await User.findById(username1);
-    const user2 = await User.findById(username2);
-
-
-    if (!user1.friends.includes(user2))
+    if (!(await User.findById(username1)).friends.includes(username2))
         return getErrorJson(400, ["Users are not friends"]);
     
     await User.findByIdAndUpdate(username1, {
@@ -73,7 +69,7 @@ async function removeFriend(username1, username2) {
  * On success - List of requestedUsername friends
  * On failure - 
  *      404, "User [requestedUsername] doesn't exist" - If requestedUsername doesn't exist in the db
- *      403, "Forbidden access to [requestedUsername]'s friends list" - If the users arn't friends
+ *      403, "Forbidden access" - If the users arn't friends
  */
 async function getUserFriends(username, requestedUsername) {
     if (username === requestedUsername)
@@ -89,7 +85,7 @@ async function getUserFriends(username, requestedUsername) {
     });
 
     if (!requestedUser)
-        return getErrorJson(403, ["Forbidden access to [" + requestedUsername + "]'s friends list"]);
+        return getErrorJson(403, ["Forbidden access"]);
     
     return {friends: requestedUser.friends};
 }
@@ -119,7 +115,7 @@ async function sendFriendRequest(senderUsername, recieverUsername) {
         return getErrorJson(409, ["Users are already friends"]);
     
     if (await checkFriendRequest(senderUsername, recieverUsername))
-        return getErrorJson(400, ["[" + recieverUsername + "] already has a friend request from [" + sendFriendRequest + "]"]);
+        return getErrorJson(400, ["[" + recieverUsername + "] already has a friend request from [" + senderUsername + "]"]);
 
     if (await checkFriendRequest(recieverUsername, senderUsername))
         await acceptRequest(recieverUsername, senderUsername);

@@ -33,8 +33,8 @@ async function updateUser(req, res) {
     if (!updateUserData)
         updateUserData = await UserService.updateUser(
             req.params.username,
-            req.params.displayName,
-            req.params.profileImage
+            req.body.displayName,
+            req.body.profileImage
         );
 
         Runner.runController(updateUserData, res);

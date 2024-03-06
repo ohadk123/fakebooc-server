@@ -21,7 +21,7 @@ async function registerUser(username, displayName, profileImage, password, cPass
     let hasErrors = false;
     let errors = [];
 
-    if (!username || username === "") {
+    if (!username) {
         errors.push("Please enter a unique username");
         hasErrors = true;
     } else if (await getUser(username)) {
@@ -57,14 +57,14 @@ async function registerUser(username, displayName, profileImage, password, cPass
     else
         errors.push("");
 
-    if (!displayName || displayName === "") {
+    if (!displayName) {
         errors.push("Please enter a display name");
         hasErrors = true;
     }
     else
         errors.push("");
 
-    if (!profileImage || profileImage === "") {
+    if (!profileImage) {
         errors.push("Please upload a profile picture");
         hasErrors = true;
     }
@@ -133,8 +133,8 @@ async function updateUser(username, newDisplayName, newProfileImage) {
 
     return {
         username: username,
-        displayName: newDisplayName,
-        profileImage: newProfileImage
+        displayName: displayName,
+        profileImage: profileImage
     };
 }
 

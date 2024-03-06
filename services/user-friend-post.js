@@ -50,12 +50,12 @@ async function getPostsForFeed(username) {
  * @returns :
  * On success - List of all posts made by uploaderUsername
  * On failure -
- *      403, "Forbidden access to [uploaderUsername]'s posts" - If users are not friends
+ *      403, "Forbidden access" - If users are not friends
  */
 async function getUserPosts(connectedUsername, uploaderUsername) {
     const areFriends = (await User.findById(connectedUsername)).friends.includes(uploaderUsername);
     if (!areFriends && connectedUsername !== uploaderUsername)
-        return getErrorJson(403, ["Forbidden access to [" + uploaderUsername + "]'s posts"]);
+        return getErrorJson(403, ["Forbidden access"]);
 
     const posts = Post.find({uploader: uploaderUsername});
     return posts;
