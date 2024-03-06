@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import getErrorJson from "./error.js";
+import TokenService from "./tokens.js";
 
 /**
  * @returns new user created
@@ -106,16 +107,7 @@ async function updateUser(username, newDisplayName, newProfileImage) {
     return await getUser(username);
 }
 
-async function verifyLogin(username, password) {
-    const user = await getUser(username);
-    if (!user)
-        return false;
-    if (user.password !== password)
-        return false;
-    return true;
-}
-
-export default {registerUser, getUserInformation, updateUser, verifyLogin};
+export default {registerUser, getUserInformation, updateUser};
 
 //---------------------------------------------------------------------------------------------------------
 async function getUser(username) {
