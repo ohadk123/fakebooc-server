@@ -3,7 +3,7 @@ import getErrorJson from "./error.js";
 
 async function addPost(uploader, content, contentImage) {
     if (!content)
-        return getErrorJson(400, "Post must have some content");
+        return getErrorJson(400, ["Post must have some content"]);
 
     const newPost = new Post({
         uploader: uploader,
@@ -17,10 +17,10 @@ async function addPost(uploader, content, contentImage) {
 async function removePost(username, pid) {
     const post = await Post.findById(pid);
     if (!post)
-        return getErrorJson(400, "Post not found");
+        return getErrorJson(400, ["Post not found"]);
 
     if (post.uploader !== username)
-        return getErrorJson(403, "Forbidden access");
+        return getErrorJson(403, ["Forbidden access"]);
 
     return await Post.findByIdAndDelete(pid);
 }

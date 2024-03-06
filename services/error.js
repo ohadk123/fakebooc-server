@@ -1,7 +1,7 @@
-function getErrorJson(status, msg) {
+function getErrorJson(status, errors) {
     return {
         status: status,
-        errors: [msg]
+        errors: errors
     };
 }
 
