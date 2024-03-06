@@ -27,14 +27,11 @@ async function getUserInformation(req, res) {
 }
 
 async function updateUser(req, res) {
-    const updatedUser = await UserService.updateUser(
+    const updateUserData = await UserService.updateUser(
         req.params.username
     );
 
-    if (!updatedUser)
-        return res.status(404).json({errors: ["User not found"]});
-
-    res.status(200).json(updatedUser);
+    runController("", "", updateUserData, res);
 }
 
 export default {registerUser, getUserInformation, updateUser};
