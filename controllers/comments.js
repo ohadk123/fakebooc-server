@@ -20,7 +20,7 @@ async function getComments(req, res) {
 }
 
 async function removeComment(req, res) {
-    const removeCommentData = CommentsService.removeComment(
+    const removeCommentData = await CommentsService.removeComment(
         req.user,
         req.params.cid
     );
@@ -29,7 +29,7 @@ async function removeComment(req, res) {
 }
 
 async function updateComment(req, res) {
-    const updateCommentData = CommentsService.updateComment(
+    const updateCommentData = await CommentsService.updateComment(
         req.user,
         req.params.cid,
         req.body.content
