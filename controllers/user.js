@@ -37,7 +37,7 @@ async function updateUser(req, res) {
             req.params.profileImage
         );
 
-        Runner.runController(req.user, req.params.username, updateUserData, res);
+        Runner.runController(updateUserData, res);
 }
 
 export default {registerUser, getUserInformation, updateUser};
