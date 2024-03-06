@@ -42,18 +42,12 @@ async function sendFriendRequest(req, res) {
 
 // patch
 async function acceptRequest(req, res) {
-    if (req.params.username !== req.user)
-        return res.status(401).json({errors: ["Unauthorized access"]});
-
     const acceptRequestData = await UserFriendService.acceptRequest(
         req.params.username,
         req.params.fusername
     );
 
-    if (acceptRequestData.status)
-        return res.status(acceptRequestData.status).json({errors: acceptRequestData.errors});
-
-    res.status(200).json(acceptRequestData);
+    runController(req.user, req.params.username, acceptRequestData, res);
 }
 
 export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};
