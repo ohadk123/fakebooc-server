@@ -1,32 +1,28 @@
-import User from "../modules/user.js";
+import User from "../models/user.js";
 
-async function deleteUser(jwt, username) {
-    // Authenticate jwt with username
+async function deleteUser(username) {
     // Remove user from friends' friends list
     // Remove user posts
 }
 
-async function addFriend(jwt, username1, username2) {
-    // Authenticate jwt with username1
+async function addFriend(username1, username2) {
     // Add to each other's friends lis
 }
 
-async function removeFriend(jwt, username1, username2) {
-    // Authenticate jwt with username1
+async function removeFriend(username1, username2) {
     // Remove from each other's friends list
 }
 
-async function getUserFriends(jwt, username, requestedUsername) {
-    // Authenticate jwt with username
+async function getUserFriends(username, requestedUsername) {
     // Only available to friends of (requestedUsername)
 }
 
-async function sendFriendRequest(jwt, senderUsername, recieverUsername) {
-    // Authenticate jwt with senderUsername
+async function sendFriendRequest(senderUsername, recieverUsername) {
+    
 }
 
-async function acceptRequest(jwt, senderUsername, recieverUsername) {
-    // Authenticate jwt with recieverUsername
+async function acceptRequest(senderUsername, recieverUsername) {
+
 }
 
 export default {deleteUser, addFriend, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};

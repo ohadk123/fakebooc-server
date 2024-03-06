@@ -1,4 +1,4 @@
-import mongoose from ("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Comment = new Schema({
@@ -8,7 +8,7 @@ const Comment = new Schema({
     },
     content : {
         type: String,
-        requied: true
+        required: true
     },
     date : {
         type: Date,
@@ -20,4 +20,4 @@ const Comment = new Schema({
     }]
 });
 
-module.exports = mongoose.model('Comment', Comment);
+export default mongoose.model('Comment', Comment);

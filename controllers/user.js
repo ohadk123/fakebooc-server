@@ -20,4 +20,4 @@ async function loginUser(req, res) {
     
 }
 
-export default {registerUser, getUserByUsername, updateUser};
+export default {registerUser, getUserByUsername, updateUser, loginUser};

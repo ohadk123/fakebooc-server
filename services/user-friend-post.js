@@ -1,5 +1,5 @@
-import User from "../modules/user.js";
-import Post from "../modules/post.js";
+import User from "../models/user.js";
+import Post from "../models/post.js";
 
 async function getPostsForFeed(username) {
     // Should get 25 most recenetly uploaded posts
@@ -7,8 +7,7 @@ async function getPostsForFeed(username) {
     // 5 posts by not (username)'s friends
 }
 
-async function getUserPosts(jwt, connectedUsername, posterUsername) {
-    // Authenticate jwt with connectedUsername
+async function getUserPosts(connectedUsername, posterUsername) {
     // Only available to friends of (posterUsername)
 }
 

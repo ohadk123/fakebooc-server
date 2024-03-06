@@ -1,4 +1,4 @@
-const UserFriendPostService = require("../services/user-friend-post.js");
+import UserFriendPostService from "../services/user-friend-post.js";
 
 // get
 async function getPostsForFeed(req, res) {
