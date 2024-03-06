@@ -14,11 +14,11 @@ async function getLikes(cid) {
         const comment = await Comment.findById(cid);
         if (!comment)
             return getErrorJson(404, ["Comment not found"]);
+        
+            return comment.likes
     } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
     }
-
-    return comment.likes
 }
 
 /**
@@ -32,18 +32,22 @@ async function getLikes(cid) {
  *      400, "Comment already liked by [username]" - If comment is already liked by username
  */
 async function addLike(username, cid) {
-    const comment = await Comment.findById(cid);
-    if (!comment)
+    try {
+        const comment = await Comment.findById(cid);
+        if (!comment)
+            return getErrorJson(404, ["Comment not found"]);
+
+        if (comment.likes.includes(username))
+            return getErrorJson(400, ["Comment already liked by [" + username + "]"]);
+
+        return await Comment.findByIdAndUpdate(cid, {
+            $push: {
+                likes: username
+            }
+        });
+    } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
-
-    if (comment.likes.includes(username))
-        return getErrorJson(400, ["Comment already liked by [" + username + "]"]);
-
-    return await Comment.findByIdAndUpdate(cid, {
-        $push: {
-            likes: username
-        }
-    });
+    }
 }
 
 /**
@@ -57,18 +61,22 @@ async function addLike(username, cid) {
  *      400, "Comment is not liked by [username]" - If comment is not liked by username
  */
 async function removeLike(username, cid) {
-    const comment = await Comment.findById(cid);
-    if (!comment)
+    try {
+        const comment = await Comment.findById(cid);
+        if (!comment)
+            return getErrorJson(404, ["Comment not found"]);
+
+        if (!comment.likes.includes(username))
+            return getErrorJson(400, ["Comment is not liked by [" + username + "]"]);
+
+        return await Comment.findByIdAndUpdate(cid, {
+            $pull: {
+                likes: username
+            }
+        });
+    } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
-
-    if (!comment.likes.includes(username))
-        return getErrorJson(400, ["Comment is not liked by [" + username + "]"]);
-
-    return await Comment.findByIdAndUpdate(cid, {
-        $pull: {
-            likes: username
-        }
-    });
+    }
 }
 
 export default {getLikes, addLike, removeLike};
