@@ -35,14 +35,18 @@ async function addPost(uploader, content, contentImage) {
  *      403, "Forbidden access" - If username is not the post's uploader
  */
 async function removePost(username, pid) {
-    const post = await Post.findById(pid);
-    if (!post)
+    try {
+        const post = await Post.findById(pid);
+        if (!post)
+            return getErrorJson(404, ["Post not found"]);
+
+        if (post.uploader !== username)
+            return getErrorJson(403, ["Forbidden access"]);
+
+        return await Post.findByIdAndDelete(pid);
+    } catch (error) {
         return getErrorJson(404, ["Post not found"]);
-
-    if (post.uploader !== username)
-        return getErrorJson(403, ["Forbidden access"]);
-
-    return await Post.findByIdAndDelete(pid);
+    }
 }
 
 export default {addPost, removePost};

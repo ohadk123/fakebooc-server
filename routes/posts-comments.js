@@ -11,7 +11,7 @@ postsCommentsRouter.route("/:cid/likes")
 
 postsCommentsRouter.route("/:cid")
     .put(TokenController.verifyToken, CommentController.updateComment)
-    .delete(TokenController.verifyToken, CommentController.updateComment);
+    .delete(TokenController.verifyToken, CommentController.removeComment);
 
 postsCommentsRouter.route('/')
     .get(TokenController.verifyToken, CommentController.getComments)

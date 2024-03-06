@@ -3,7 +3,7 @@ import getErrorJson from "./error.js";
 
 async function addComment(uploader, pid, content) {
     if (!content)
-        return getErrorJson(400, ["Post must have some content"]);
+        return getErrorJson(400, ["Comment must have some content"]);
 
     const comment = new Comment({
         post: pid,
@@ -19,31 +19,41 @@ async function getComments(pid) {
 }
 
 async function removeComment(username, cid) {
-    const comment = await Comment.findById(cid);
-    if (!comment)
+    try {
+        const comment = await Comment.findById(cid);
+        if (!comment)
+            return getErrorJson(404, ["Comment not found"]);
+
+        if (comment.uploader !== username)
+            return getErrorJson(403, ["Forbidden access"]);
+
+        return await Comment.findByIdAndDelete(cid);
+    } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
-
-    if (comment.uploader !== username)
-        return getErrorJson(403, ["Forbidden access"]);
-
-    return await Comment.findByIdAndDelete(cid);
+    }
 }
 
 async function updateComment(username, cid, newContent) {
-    const comment = await Comment.findById(cid);
-    if (!comment)
+    try {
+        const comment = await Comment.findById(cid);
+        if (!comment)
+            return getErrorJson(404, ["Comment not found"]);
+
+        if (username !== comment.uploader)
+            return getErrorJson(403, ["Forbidden access"]);
+
+        let content = comment.content;
+        if (newContent)
+            content = newContent;
+
+        await Comment.findByIdAndUpdate(cid, {
+        content: content 
+        });
+
+        return await Comment.findById(cid);
+    } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
-
-    if (username !== comment.uploader)
-        return getErrorJson(403, ["Forbidden access"]);
-
-    let content = comment.content;
-    if (newContent)
-        content = newContent;
-
-    return await Comment.findByIdAndUpdate(cid, {
-       content: content 
-    });
+    }
 }
 
 export default {addComment, getComments, removeComment, updateComment};

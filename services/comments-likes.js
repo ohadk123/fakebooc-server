@@ -40,11 +40,13 @@ async function addLike(username, cid) {
         if (comment.likes.includes(username))
             return getErrorJson(400, ["Comment already liked by [" + username + "]"]);
 
-        return await Comment.findByIdAndUpdate(cid, {
+        await Comment.findByIdAndUpdate(cid, {
             $push: {
                 likes: username
             }
         });
+
+        return await Comment.findById(cid);
     } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
     }
@@ -69,11 +71,13 @@ async function removeLike(username, cid) {
         if (!comment.likes.includes(username))
             return getErrorJson(400, ["Comment is not liked by [" + username + "]"]);
 
-        return await Comment.findByIdAndUpdate(cid, {
+        await Comment.findByIdAndUpdate(cid, {
             $pull: {
                 likes: username
             }
         });
+
+        return await Comment.findById(cid);
     } catch (error) {
         return getErrorJson(404, ["Comment not found"]);
     }
