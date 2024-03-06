@@ -11,7 +11,7 @@ import getErrorJson from "./error.js";
  * On success - User information as it shows on db
  * if any input errors accrued -
  *      409,
- *      errors[0]: "Username already in user" - If username already exists in the db
+ *      errors[0]: "Username already in use" - If username already exists in the db
  *      errors[1]: A concatinated string of password errors
  *      errors[2]: "Passwords don't match" - If password confirmation doesn't match password
  *      errors[3]: "Please enter a display name" - If displayName is null
