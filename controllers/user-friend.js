@@ -43,8 +43,8 @@ async function sendFriendRequest(req, res) {
 // patch
 async function acceptRequest(req, res) {
     const acceptRequestData = await UserFriendService.acceptRequest(
-        req.params.username,
-        req.params.fusername
+        req.params.fusername,
+        req.params.username
     );
 
     runController(req.user, req.params.username, acceptRequestData, res);

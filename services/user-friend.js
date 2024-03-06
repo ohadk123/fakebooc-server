@@ -13,7 +13,7 @@ async function deleteUser(username) {
     await removeAllComments(username);
     await removeAllLikes(username);
 
-    return await User.findByIdAndDelete(username);
+    await User.findByIdAndDelete(username);
 }
 
 async function removeFriend(username1, username2) {
@@ -39,11 +39,6 @@ async function removeFriend(username1, username2) {
             friends: username1
         }
     });
-
-    return {
-        user1: updatedUser1,
-        user2: updatedUser2
-    };
 }
 
 async function getUserFriends(username, requestedUsername) {
@@ -83,15 +78,15 @@ async function sendFriendRequest(senderUsername, recieverUsername) {
             friendReq: senderUsername
         }
     });
-
-    return await User.findById(senderUsername);
 }
 
 async function acceptRequest(senderUsername, recieverUsername) {
-    if (!(await checkFriendRequest(senderUsername, recieverUsername)))
+    const hasFriendRequest = await checkFriendRequest(senderUsername, recieverUsername)
+    if (!hasFriendRequest)
         return getErrorJson(400, ["user [" + recieverUsername + "] doesn't have a friend request from user [" + senderUsername + "]"]);
     
-    return await addFriends(senderUsername, recieverUsername);
+    await addFriends(senderUsername, recieverUsername);
+    await removeFriendRequest(senderUsername, recieverUsername);
 }
 
 export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};
@@ -132,7 +127,8 @@ async function removeAllLikes(username) {
 }
 
 async function checkFriendRequest(senderUsername, recieverUsername) {
-    return (await User.findById(recieverUsername)).friends.includes(senderUsername);
+    const hasFriendRequest = (await User.findById(recieverUsername)).friendReq.includes(senderUsername);
+    return hasFriendRequest;
 }
 
 async function addFriends(username1, username2) {
@@ -183,4 +179,12 @@ async function checkIfUserExists(username) {
 
 async function checkIfFriends(username1, username2) {
     return (await User.findById(username1)).friends.includes(username2);
+}
+
+async function removeFriendRequest(senderUsername, recieverUsername) {
+    await User.findByIdAndUpdate(recieverUsername, {
+        $pull: {
+            friendReq: senderUsername
+        }
+    });
 }
