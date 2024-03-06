@@ -1,17 +1,9 @@
-import User from "../models/user.js";
 import Post from "../models/post.js";
-import Comment from "../models/comment.js";
+import getErrorJson from "./error.js";
 
 async function addPost(uploader, content, contentImage) {
-    let errors = [];
-
     if (!content)
-        errors.push("Post must have some content");
-
-    if (errors.length > 0)
-        return {errors: errors};
-
-    const uploaderId = (await User.findById(uploader))._id;
+        return getErrorJson(400, "Post must have some content");
 
     const newPost = new Post({
         uploader: uploader,
@@ -25,10 +17,10 @@ async function addPost(uploader, content, contentImage) {
 async function removePost(username, pid) {
     const post = await Post.findById(pid);
     if (!post)
-        return {errors: ["Post not found"]};
+        return getErrorJson(400, "Post not found");
 
     if (post.uploader !== username)
-        return {errors: ["Unauthorized access"]};
+        return getErrorJson(403, "Forbidden access");
 
     return await Post.findByIdAndDelete(pid);
 }
