@@ -1,9 +1,9 @@
 import PostService from "../services/post.js";
-import {authorizeRequest, runController} from "./runner.js";
+import Runner from "./runner.js";
 
 // put
 async function updatePost(req, res) {
-    let updatePostData = authorizeRequest(req.user, req.params.username);
+    let updatePostData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!updatePostData)
         updatePostData = PostService.updatePost(
@@ -12,7 +12,7 @@ async function updatePost(req, res) {
             req.params.contentImage
         );
 
-    runController(updatePostData, res);
+        Runner.runController(updatePostData, res);
 }
 
 export default {updatePost};

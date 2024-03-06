@@ -1,9 +1,9 @@
 import  UserPostService from "../services/user-post.js";
-import {authorizeRequest, runController} from "./runner.js";
+import Runner from "./runner.js";
 
 // post
 async function addPost(req, res) {
-    let addPostData = authorizeRequest(req.user, req.params.username);
+    let addPostData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!addPostData)
         addPostData = await UserPostService.addPost(
@@ -12,12 +12,12 @@ async function addPost(req, res) {
             req.body.contentImage
         );
     
-    runController(addPostData, res);
+        Runner.runController(addPostData, res);
 }
 
 // delete
 async function removePost(req, res) {
-    let removePostData = authorizeRequest(req.user, req.params.username);
+    let removePostData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!removePostData)
         removePostData = await UserPostService.removePost(
@@ -25,7 +25,7 @@ async function removePost(req, res) {
             req.params.pid
         );
 
-    runController(removePostData, res);
+        Runner.runController(removePostData, res);
 }
 
 export default {addPost, removePost};

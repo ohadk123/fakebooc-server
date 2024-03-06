@@ -1,21 +1,21 @@
 import UserFriendService from "../services/user-friend.js";
-import {authorizeRequest, runController} from "./runner.js";
+import Runner from "./runner.js";
 
 // delete
 async function deleteUser(req, res) {
-    let deleteUserData = authorizeRequest(req.user, req.params.username);
+    let deleteUserData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!deleteUserData)
         deleteUserData = await UserFriendService.deleteUser(
             req.params.username
         );
 
-    runController(deleteUserData, res);
+        Runner.runController(deleteUserData, res);
 }
 
 // delete
 async function removeFriend(req, res) {
-    let removeFriendData = authorizeRequest(req.user, req.params.username);
+    let removeFriendData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!removeFriendData)
         removeFriendData = await UserFriendService.removeFriend(
@@ -23,7 +23,7 @@ async function removeFriend(req, res) {
             req.params.fusername
         );
 
-    runController(removeFriendData, res);
+        Runner.runController(removeFriendData, res);
 }
 
 // get
@@ -33,7 +33,7 @@ async function getUserFriends(req, res) {
         req.params.username
     );
 
-    runController(getUserFriendsData, res);
+    Runner.runController(getUserFriendsData, res);
 }
 
 // post
@@ -43,12 +43,12 @@ async function sendFriendRequest(req, res) {
         req.params.username
     );
 
-    runController(sendFriendRequestData, res);
+    Runner.runController(sendFriendRequestData, res);
 }
 
 // patch
 async function acceptRequest(req, res) {
-    let acceptRequestData = authorizeRequest(req.user, req.params.username);
+    let acceptRequestData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!acceptRequestData)
         acceptRequestData = await UserFriendService.acceptRequest(
@@ -56,7 +56,7 @@ async function acceptRequest(req, res) {
             req.params.username
         );
 
-    runController(acceptRequestData, res);
+    Runner.runController(acceptRequestData, res);
 }
 
 export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};

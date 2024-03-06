@@ -1,5 +1,5 @@
 import UserService from "../services/user.js";
-import {authorizeRequest, runController} from "./runner.js";
+import Runner from "./runner.js";
 
 // Success - 200 and user data
 // Fail - 409 and errors list
@@ -11,7 +11,7 @@ async function registerUser(req, res) {
         req.body.password
     );
 
-    runController(registerData, res);
+    Runner.runController(registerData, res);
 }
 
 /**
@@ -23,11 +23,11 @@ async function getUserInformation(req, res) {
         req.params.username
     );
 
-    runController(getUserInformationData, res);
+    Runner.runController(getUserInformationData, res);
 }
 
 async function updateUser(req, res) {
-    let updateUserData = authorizeRequest(req.user, req.params.username);
+    let updateUserData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!updateUserData)
         updateUserData = await UserService.updateUser(
@@ -36,7 +36,7 @@ async function updateUser(req, res) {
             req.params.profileImage
         );
 
-    runController(req.user, req.params.username, updateUserData, res);
+        Runner.runController(req.user, req.params.username, updateUserData, res);
 }
 
 export default {registerUser, getUserInformation, updateUser};
