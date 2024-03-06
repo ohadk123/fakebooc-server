@@ -1,6 +1,7 @@
 import express from "express";
 import PostController from "../controllers/post.js";
 import UserPostController from "../controllers/user-post.js";
+import TokenController from "../controllers/tokens.js";
 import UserFriendPostController from "../controllers/user-friend-post.js";
 
 const usersPostsRouter = express.Router({mergeParams: true});

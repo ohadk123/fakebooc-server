@@ -1,5 +1,6 @@
 import express from "express";
-import UserFriendController from "../controllers/user-friend.js"
+import UserFriendController from "../controllers/user-friend.js";
+import TokenController from "../controllers/tokens.js";
 const usersFriendsRouter = express.Router({mergeParams: true});
 
 usersFriendsRouter.route("/")
