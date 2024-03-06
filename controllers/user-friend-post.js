@@ -1,5 +1,5 @@
 import UserFriendPostService from "../services/user-friend-post.js";
-import runController from "./runner.js";
+import Runner from "./runner.js";
 
 // get
 async function getPostsForFeed(req, res) {
@@ -7,7 +7,7 @@ async function getPostsForFeed(req, res) {
         req.user
     );
 
-    runController(getPostsForFeedData, res);
+    Runner.runController(getPostsForFeedData, res);
 }
 
 // get
@@ -17,7 +17,7 @@ async function getUserPosts(req, res) {
         req.params.username
     );
 
-    runController(getUserPostsData, res);
+    Runner.runController(getUserPostsData, res);
 }
 
 export default {getPostsForFeed, getUserPosts};

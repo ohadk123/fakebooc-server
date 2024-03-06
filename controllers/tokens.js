@@ -1,5 +1,5 @@
 import TokenService from "../services/tokens.js";
-import runController from "./runner.js";
+import Runner from "./runner.js";
 
 async function createToken(req, res) {
     const createTokenData = await TokenService.createToken(
@@ -7,7 +7,7 @@ async function createToken(req, res) {
         req.body.password
     );
     
-    runController(createTokenData, res);
+    Runner.runController(createTokenData, res);
 }
 
 function verifyToken(req, res, next) {
@@ -20,7 +20,7 @@ function verifyToken(req, res, next) {
         return next();
     }
 
-    runController(verifyTokenData, res);
+    Runner.runController(verifyTokenData, res);
 }
 
 export default {createToken, verifyToken};

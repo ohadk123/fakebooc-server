@@ -1,5 +1,5 @@
 import CommentsService from "../services/comments.js";
-import runController from "./runner.js";
+import Runner from "./runner.js";
 
 async function addComment(req, res) {
     const addCommentData = await CommentsService.addComment(
@@ -8,7 +8,7 @@ async function addComment(req, res) {
         req.body.content
     );
 
-    runController(addCommentData, res);
+    Runner.runController(addCommentData, res);
 }
 
 async function getComments(req, res) {
@@ -16,7 +16,7 @@ async function getComments(req, res) {
         req.params.pid
     );
 
-    runController(getCommentsData, res);
+    Runner.runController(getCommentsData, res);
 }
 
 async function removeComment(req, res) {
@@ -25,7 +25,7 @@ async function removeComment(req, res) {
         req.params.cid
     );
 
-    runController(removeCommentData, res);
+    Runner.runController(removeCommentData, res);
 }
 
 async function updateComment(req, res) {
@@ -35,7 +35,7 @@ async function updateComment(req, res) {
         req.body.content
     );
 
-    runController(updateCommentData, res);
+    Runner.runController(updateCommentData, res);
 }
 
 export default {addComment, getComments, removeComment, updateComment};
