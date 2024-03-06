@@ -94,94 +94,96 @@ async function acceptRequest(senderUsername, recieverUsername) {
     return await addFriends(senderUsername, recieverUsername);
 }
 
-//----------------------------------------------------------------------
-
-async function removeFromAllFriends(username) {
-    await User.updateMany({}, {
-        $pull: {
-            friends: username
-        }
-    });
-}
-
-async function removeAllPosts(username) {
-    await Post.deleteMany({
-        uploader: username
-    });
-}
-
-async function removeAllComments(username) {
-    await Comment.deleteMany({
-        uploader: username
-    });
-}
-
-async function removeAllLikes(username) {
-    await Post.updateMany({}, {
-        $pull: {
-            likes: username
-        }
-    });
-
-    await Comment.updateMany({}, {
-        $pull: {
-            likes: username
-        }
-    });
-}
-
-async function checkFriendRequest(senderUsername, recieverUsername) {
-    return (await User.findById(recieverUsername)).friends.includes(senderUsername);
-}
-
-async function addFriends(username1, username2) {
-    const usersExists = await checkIfUsersExist(username1, username2);
-    if (usersExists)
-        return usersExists;
-
-    const user1 = await User.findById(username1);
-    const user2 = await User.findById(username2);
-
-    if (user1.friends.includes(user2))
-        return getErrorJson(400, ["Users are friends already"]);
-
-    const updatedUser1 = await User.findByIdAndUpdate(user1,{
-        $push: {
-            friends: user2
-        }
-    });
-
-    const updatedUser2 = await User.findByIdAndUpdate(user2,{
-        $push: {
-            friends: user1
-        }
-    });
-
-    return {
-        user1: updatedUser1,
-        user2: updatedUser2
-    };
-}
-
-async function checkIfUsersExist(username1, username2) {
-    const user1Exists = await checkIfUserExists(username1);
-    if (user1Exists)
-        return user1Exists;
-
-    const user2Exists = await checkIfUserExists(username2);
-    if (user2Exists)
-        return user2Exists;
-}
-
-async function checkIfUserExists(username) {
-    const user = await User.findById(username);
-
-    if (!user)
-        return getErrorJson(404, ["User [" + username + "] not found"]);
-}
-
-async function checkIfFriends(username1, username2) {
-    return (await User.findById(username1)).friends.includes(username2);
-}
-
 export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};
+
+//---------------------------------------------------------------------------------------------------------
+
+{ // Helper Functions
+    async function removeFromAllFriends(username) {
+        await User.updateMany({}, {
+            $pull: {
+                friends: username
+            }
+        });
+    }
+
+    async function removeAllPosts(username) {
+        await Post.deleteMany({
+            uploader: username
+        });
+    }
+
+    async function removeAllComments(username) {
+        await Comment.deleteMany({
+            uploader: username
+        });
+    }
+
+    async function removeAllLikes(username) {
+        await Post.updateMany({}, {
+            $pull: {
+                likes: username
+            }
+        });
+
+        await Comment.updateMany({}, {
+            $pull: {
+                likes: username
+            }
+        });
+    }
+
+    async function checkFriendRequest(senderUsername, recieverUsername) {
+        return (await User.findById(recieverUsername)).friends.includes(senderUsername);
+    }
+
+    async function addFriends(username1, username2) {
+        const usersExists = await checkIfUsersExist(username1, username2);
+        if (usersExists)
+            return usersExists;
+
+        const user1 = await User.findById(username1);
+        const user2 = await User.findById(username2);
+
+        if (user1.friends.includes(user2))
+            return getErrorJson(400, ["Users are friends already"]);
+
+        const updatedUser1 = await User.findByIdAndUpdate(user1,{
+            $push: {
+                friends: user2
+            }
+        });
+
+        const updatedUser2 = await User.findByIdAndUpdate(user2,{
+            $push: {
+                friends: user1
+            }
+        });
+
+        return {
+            user1: updatedUser1,
+            user2: updatedUser2
+        };
+    }
+
+    async function checkIfUsersExist(username1, username2) {
+        const user1Exists = await checkIfUserExists(username1);
+        if (user1Exists)
+            return user1Exists;
+
+        const user2Exists = await checkIfUserExists(username2);
+        if (user2Exists)
+            return user2Exists;
+    }
+
+    async function checkIfUserExists(username) {
+        const user = await User.findById(username);
+
+        if (!user)
+            return getErrorJson(404, ["User [" + username + "] not found"]);
+    }
+
+    async function checkIfFriends(username1, username2) {
+        return (await User.findById(username1)).friends.includes(username2);
+    }
+}

@@ -108,36 +108,38 @@ async function updateUser(username, newDisplayName, newProfileImage) {
 
 export default {registerUser, getUserInformation, updateUser, verifyLogin};
 
-//-----------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------
 
-async function verifyLogin(username, password) {
-    const user = await getUser(username);
-    if (!user)
-        return false;
-    if (user.password !== password)
-        return false;
-    return true;
-}
+{ // Helper Functions
+    async function verifyLogin(username, password) {
+        const user = await getUser(username);
+        if (!user)
+            return false;
+        if (user.password !== password)
+            return false;
+        return true;
+    }
 
-async function getUser(username) {
-    return await User.findById(username);
-}
+    async function getUser(username) {
+        return await User.findById(username);
+    }
 
-/**
- * Adds a user to the database.
- * @param {String} username - A unique username for the user.
- * @param {String} displayName - A display name for the platform.
- * @param {String} profileImage - A profile picture encoded in base64
- * @param {String} password - A secret password used to login
- * @returns A json of the new user that was created.
- */
-async function addUser(username, displayName, profileImage, password) {
-    // TODO: handle errors
-    const user = new User({
-        _id: username,
-        displayName: displayName,
-        profileImage: profileImage,
-        password: password
-    });
-    return await user.save();
+    /**
+     * Adds a user to the database.
+     * @param {String} username - A unique username for the user.
+     * @param {String} displayName - A display name for the platform.
+     * @param {String} profileImage - A profile picture encoded in base64
+     * @param {String} password - A secret password used to login
+     * @returns A json of the new user that was created.
+     */
+    async function addUser(username, displayName, profileImage, password) {
+        // TODO: handle errors
+        const user = new User({
+            _id: username,
+            displayName: displayName,
+            profileImage: profileImage,
+            password: password
+        });
+        return await user.save();
+    }
 }
