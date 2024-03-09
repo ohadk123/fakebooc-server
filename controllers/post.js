@@ -6,6 +6,7 @@ async function updatePost(req, res) {
     let updatePostData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!updatePostData)
+        console.log(req);
         updatePostData = await PostService.updatePost(
             req.params.username,
             req.params.pid,

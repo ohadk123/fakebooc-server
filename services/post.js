@@ -23,7 +23,6 @@ async function updatePost(loggedUsername, pid, newContent, newContentImage) {
 
         let content = post.content;
         let contentImage = post.contentImage;
-
         if (newContent)
             content = newContent;
         if (newContentImage)

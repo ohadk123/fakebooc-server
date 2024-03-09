@@ -5,14 +5,15 @@ import Runner from "./runner.js";
 async function addPost(req, res) {
     let addPostData = Runner.authorizeRequest(req.user, req.params.username);
 
-    if (!addPostData)
+    if (!addPostData){
+        console.log(req);
         addPostData = await UserPostService.addPost(
             req.params.username,
             req.body.content,
             req.body.contentImage
         );
     
-        Runner.runController(addPostData, res);
+        Runner.runController(addPostData, res);}
 }
 
 // delete

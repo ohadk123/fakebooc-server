@@ -25,17 +25,20 @@ async function getPostsForFeed(username) {
     while(posts.length > 0) {
         let post = posts.pop();
         let uploader = await User.findById(post.uploader);
-
-        if (username == uploader)
+        
+        if (user.id == uploader.id) {
+            //TODO: delete this line before submitting
+            feed.push(post);
             continue;
+        }
 
         if (user.friends.includes(uploader._id)) {
             if (friendsPostsLeft > 0) {
-                feed.unshift(post);
+                feed.push(post);
                 friendsPostsLeft--;
             }
         } else if (othersPostsLeft > 0) {
-            feed.unshift(post);
+            feed.push(post);
             othersPostsLeft--;
         } else break;
     }
