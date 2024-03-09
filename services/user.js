@@ -123,13 +123,12 @@ async function updateUser(username, newDisplayName, newProfileImage) {
     profileImage: profileImage,
   };
 }
-
-export default { registerUser, getUserInformation, updateUser };
-
-//---------------------------------------------------------------------------------------------------------
 async function getUser(username) {
   return await User.findById(username);
 }
+export default { registerUser, getUser, getUserInformation, updateUser };
+
+//---------------------------------------------------------------------------------------------------------
 
 async function addUser(username, displayName, profileImage, password) {
   const user = new User({
