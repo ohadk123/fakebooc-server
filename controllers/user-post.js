@@ -6,7 +6,7 @@ async function addPost(req, res) {
     let addPostData = Runner.authorizeRequest(req.user, req.params.username);
 
     if (!addPostData){
-        console.log(req);
+      
         addPostData = await UserPostService.addPost(
             req.params.username,
             req.body.content,

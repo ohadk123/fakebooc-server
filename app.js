@@ -4,13 +4,12 @@ import cors from "cors";
 import mongoose from "mongoose";
 import customEnv from "custom-env";
 import apiRouter from "./routes/api.js";
-import audit from "express-requests-logger";   
+import audit from "express-requests-logger";
 customEnv.env(process.env.NODE_ENV, "./config");
 console.log(process.env.CONNECTION_STRING);
 console.log(process.env.PORT);
 
 mongoose.connect(process.env.CONNECTION_STRING, {});
-
 
 const app = express();
 
@@ -22,7 +21,6 @@ app.use(express.json());
 app.use("/api", apiRouter);
 app.use(audit());
 app.use((req, res, next) => {
-    console.log(req);
-    next();
+  next();
 });
 app.listen(process.env.PORT);

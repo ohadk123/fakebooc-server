@@ -138,6 +138,5 @@ async function addUser(username, displayName, profileImage, password) {
     password: password,
   });
   //todo doesnt work
-  console.log(user);
   return await user.save();
 }

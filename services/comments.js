@@ -20,7 +20,7 @@ async function getComments(pid) {
     let user = await User.getUser(comment.uploader);
     comment.uploader = user;
   }
-  console.log(comments);
+
   return comments;
 }
 

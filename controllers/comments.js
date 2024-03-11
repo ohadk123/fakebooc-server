@@ -18,6 +18,7 @@ async function getComments(req, res) {
 }
 
 async function removeComment(req, res) {
+ 
   const removeCommentData = await CommentsService.removeComment(
     req.user,
     req.params.cid
