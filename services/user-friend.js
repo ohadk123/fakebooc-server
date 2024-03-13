@@ -164,7 +164,16 @@ async function acceptRequest(senderUsername, recieverUsername) {
     };
 }
 
-export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};
+async function getFriendReqList(username) {
+    const userExists = await checkIfUserExists(username);
+    if (userExists)
+        return userExists;
+
+    const user = await User.findById(username)
+    return user.friendReq;
+}
+
+export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest, getFriendReqList};
 
 //---------------------------------------------------------------------------------------------------------
 async function removeFromAllFriends(username) {

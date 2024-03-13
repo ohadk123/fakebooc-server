@@ -59,4 +59,13 @@ async function acceptRequest(req, res) {
     Runner.runController(acceptRequestData, res);
 }
 
-export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest};
+async function getFriendReqList(req, res) {
+    let getFriendReqListData = Runner.authorizeRequest(req.user, req.params.username);
+
+    if (!getFriendReqListData)
+        getFriendReqListData = await UserFriendService.getFriendReqList(req.user);
+
+    Runner.runController(getFriendReqListData, res);
+}
+
+export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest, getFriendReqList};
