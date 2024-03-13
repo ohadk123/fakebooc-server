@@ -11,4 +11,7 @@ usersFriendsRouter.route("/:fusername")
     .patch(TokenController.verifyToken, UserFriendController.acceptRequest)
     .delete(TokenController.verifyToken, UserFriendController.removeFriend);
 
+usersFriendsRouter.route("/requests")
+    .get(TokenController.verifyToken, UserFriendController.getFriendReqList)
+
 export default usersFriendsRouter
