@@ -21,10 +21,6 @@ async function updatePost(loggedUsername, pid, newContent, newContentImage) {
         if (post.uploader !== loggedUsername)
             return getErrorJson(403, ["Forbidden access"]);
 
-        if (!newContent && !newContentImage)
-        return getErrorJson(400, ["Post must have some content"]);
-
-
         let content = post.content;
         let contentImage = post.contentImage;
         if (newContent)
