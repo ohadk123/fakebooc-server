@@ -12,7 +12,7 @@ import getErrorJson from "./error.js";
  *      400, "Post must have some content" - If text content is null
  */
 async function addPost(uploader, content, contentImage) {
-    if (!content)
+    if (!content && !contentImage)
         return getErrorJson(400, ["Post must have some content"]);
 
     const newPost = new Post({
