@@ -87,7 +87,10 @@ async function getUserInformation(username) {
   return {
     username: user._id,
     displayName: user.displayName,
+    friends: user.friends,
+    friendReq: user.friendReq,
     profileImage: user.profileImage,
+
   };
 }
 
