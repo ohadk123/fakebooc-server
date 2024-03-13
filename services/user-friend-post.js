@@ -60,7 +60,7 @@ async function getUserPosts(connectedUsername, uploaderUsername) {
     if (!areFriends && connectedUsername !== uploaderUsername)
         return getErrorJson(403, ["Forbidden access"]);
 
-    const posts = Post.find({uploader: uploaderUsername});
+    const posts = await Post.find({uploader: uploaderUsername}).sort({ date: -1 });
     return posts;
 }
 
