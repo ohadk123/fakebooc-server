@@ -3,69 +3,97 @@ import Runner from "./runner.js";
 
 // delete
 async function deleteUser(req, res) {
-    let deleteUserData = Runner.authorizeRequest(req.user, req.params.username);
+  let deleteUserData = Runner.authorizeRequest(req.user, req.params.username);
 
-    if (!deleteUserData)
-        deleteUserData = await UserFriendService.deleteUser(
-            req.params.username
-        );
+  if (!deleteUserData)
+    deleteUserData = await UserFriendService.deleteUser(req.params.username);
 
-        Runner.runController(deleteUserData, res);
+  Runner.runController(deleteUserData, res);
 }
 
 // delete
 async function removeFriend(req, res) {
-    let removeFriendData = Runner.authorizeRequest(req.user, req.params.username);
+  let removeFriendData = Runner.authorizeRequest(req.user, req.params.username);
 
-    if (!removeFriendData)
-        removeFriendData = await UserFriendService.removeFriend(
-            req.params.username,
-            req.params.fusername
-        );
+  if (!removeFriendData)
+    removeFriendData = await UserFriendService.removeFriend(
+      req.params.username,
+      req.params.fusername
+    );
 
-        Runner.runController(removeFriendData, res);
+  Runner.runController(removeFriendData, res);
 }
 
 // get
 async function getUserFriends(req, res) {
-    const getUserFriendsData = await UserFriendService.getUserFriends(
-        req.user,
-        req.params.username
-    );
+  const getUserFriendsData = await UserFriendService.getUserFriends(
+    req.user,
+    req.params.username
+  );
 
-    Runner.runController(getUserFriendsData, res);
+  Runner.runController(getUserFriendsData, res);
 }
 
 // post
 async function sendFriendRequest(req, res) {
-    const sendFriendRequestData = await UserFriendService.sendFriendRequest(
-        req.user,
-        req.params.username
-    );
+  const sendFriendRequestData = await UserFriendService.sendFriendRequest(
+    req.user,
+    req.params.username
+  );
 
-    Runner.runController(sendFriendRequestData, res);
+  Runner.runController(sendFriendRequestData, res);
 }
 
 // patch
 async function acceptRequest(req, res) {
-    let acceptRequestData = Runner.authorizeRequest(req.user, req.params.username);
+  let acceptRequestData = Runner.authorizeRequest(
+    req.user,
+    req.params.username
+  );
 
-    if (!acceptRequestData)
-        acceptRequestData = await UserFriendService.acceptRequest(
-            req.params.fusername,
-            req.params.username
-        );
+  if (!acceptRequestData)
+    acceptRequestData = await UserFriendService.acceptRequest(
+      req.params.fusername,
+      req.params.username
+    );
 
-    Runner.runController(acceptRequestData, res);
+  Runner.runController(acceptRequestData, res);
+}
+
+//get
+async function declineRequest(req, res) {
+  let declineRequestData = Runner.authorizeRequest(
+    req.user,
+    req.params.username
+  );
+
+  if (!declineRequestData)
+    declineRequestData = await UserFriendService.declineFriendRequest(
+      req.params.fusername,
+      req.params.username
+    );
+
+  Runner.runController(declineRequestData, res);
 }
 
 async function getFriendReqList(req, res) {
-    let getFriendReqListData = Runner.authorizeRequest(req.user, req.params.username);
+  let getFriendReqListData = Runner.authorizeRequest(
+    req.user,
+    req.params.username
+  );
 
-    if (!getFriendReqListData)
-        getFriendReqListData = await UserFriendService.getFriendReqList(req.user);
+  if (!getFriendReqListData)
+    getFriendReqListData = await UserFriendService.getFriendReqList(req.user);
 
-    Runner.runController(getFriendReqListData, res);
+  Runner.runController(getFriendReqListData, res);
 }
 
-export default {deleteUser, removeFriend, getUserFriends, sendFriendRequest, acceptRequest, getFriendReqList};
+export default {
+  deleteUser,
+  removeFriend,
+  getUserFriends,
+  sendFriendRequest,
+  acceptRequest,
+  declineRequest,
+  getFriendReqList,
+};
