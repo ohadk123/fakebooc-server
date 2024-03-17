@@ -84,6 +84,10 @@ async function getFriendReqList(req, res) {
 
   if (!getFriendReqListData)
     getFriendReqListData = await UserFriendService.getFriendReqList(req.user);
+  else
+    getFriendReqListData = await UserFriendService.getFriendReqList(
+      req.params.username
+    );
 
   Runner.runController(getFriendReqListData, res);
 }
