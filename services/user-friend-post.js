@@ -12,38 +12,39 @@ import getErrorJson from "./error.js";
  *      404, "User [username] not found" - If username doesn't exist in database
  */
 async function getPostsForFeed(username) {
-    if (!(await User.findById(username)))
-        return getErrorJson(404, ["User [" + username + "] not found"]);
+  if (!(await User.findById(username)))
+    return getErrorJson(404, ["User [" + username + "] not found"]);
 
-    const posts = await Post.find({}).sort("date");
-    const user = await User.findById(username);
-    const feed = [];
+  const posts = await Post.find({}).sort("date");
+  const user = await User.findById(username);
+  const feed = [];
 
-    let friendsPostsLeft = 20;
-    let othersPostsLeft = 5;
+  let friendsPostsLeft = 20;
+  let othersPostsLeft = 5;
 
-    while(posts.length > 0) {
-        let post = posts.pop();
-        let uploader = await User.findById(post.uploader);
-        
-        if (user.id == uploader.id) {
-            //TODO: delete this line before submitting
-            feed.push(post);
-            continue;
-        }
+  while (posts.length > 0) {
+    let post = posts.pop();
+    let uploader = await User.findById(post.uploader);
 
-        if (user.friends.includes(uploader._id)) {
-            if (friendsPostsLeft > 0) {
-                feed.push(post);
-                friendsPostsLeft--;
-            }
-        } else if (othersPostsLeft > 0) {
-            feed.push(post);
-            othersPostsLeft--;
-        } else break;
+    if (user.id == uploader.id) {
+      //TODO: delete this line before submitting
+      feed.push(post);
+      friendsPostsLeft--;
+      continue;
     }
 
-    return {posts: feed};
+    if (user.friends.includes(uploader._id)) {
+      if (friendsPostsLeft > 0) {
+        feed.push(post);
+        friendsPostsLeft--;
+      }
+    } else if (othersPostsLeft > 0) {
+      feed.push(post);
+      othersPostsLeft--;
+    } else break;
+  }
+
+  return { posts: feed };
 }
 
 /**
@@ -56,12 +57,16 @@ async function getPostsForFeed(username) {
  *      403, "Forbidden access" - If users are not friends
  */
 async function getUserPosts(connectedUsername, uploaderUsername) {
-    const areFriends = (await User.findById(connectedUsername)).friends.includes(uploaderUsername);
-    if (!areFriends && connectedUsername !== uploaderUsername)
-        return getErrorJson(403, ["Forbidden access"]);
+  const areFriends = (await User.findById(connectedUsername)).friends.includes(
+    uploaderUsername
+  );
+  if (!areFriends && connectedUsername !== uploaderUsername)
+    return getErrorJson(403, ["Forbidden access"]);
 
-    const posts = await Post.find({uploader: uploaderUsername}).sort({ date: -1 });
-    return posts;
+  const posts = await Post.find({ uploader: uploaderUsername }).sort({
+    date: -1,
+  });
+  return posts;
 }
 
-export default {getPostsForFeed, getUserPosts};
+export default { getPostsForFeed, getUserPosts };
