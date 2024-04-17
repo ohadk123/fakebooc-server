@@ -4,8 +4,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <thread> // Include the thread header
-
+#include <thread>            // Include the thread header
+#include "UserInterection.h" // Include the header file for UserInteraction class
 const int BUFFER_SIZE = 4096;
 const int SERVER_PORT = 5555;
 
@@ -65,9 +65,10 @@ void closeSocket(int sock)
         error("Error closing socket");
 }
 
-void handleClient(int client_sock)
+void handleClient(int client_sock, UserInterection ui)
 {
     char buffer[BUFFER_SIZE];
+    int response;
     int read_bytes;
 
     while (true)
@@ -87,27 +88,17 @@ void handleClient(int client_sock)
         {
             buffer[read_bytes] = '\0'; // Null-terminate the received data
 
-            char option = buffer[0];
-            std::cout << "Client chose option: " << option << std::endl;
+            std::cout << "what is the command to execute" << buffer << std::endl;
+            // todo send to bloom filter and receive response from it
+            int response = ui.InputCommand(buffer);
 
-            switch (option)
+            if (response == 0)
             {
-            case '1':
-                std::cout << "Client chose to continue.\n";
-                send(client_sock, "continue!", 9, 0);
-                break;
-            case '2':
-                std::cout << "Client chose to close socket.\n";
-                send(client_sock, "bye", 4, 0);
-                // closeSocket(client_sock); only in not same computer
-                return;
-            default:
                 std::cout << "Invalid option received from client.\n";
+                // todo return error message to client
             }
         }
     }
-
-    // closeSocket(client_sock); only in not same computer
 }
 
 int main()
@@ -122,6 +113,7 @@ int main()
 
     bindSocket(sock, sin);
     listenToSocket(sock);
+    UserInterection ui;
 
     while (true)
     {
@@ -133,8 +125,8 @@ int main()
             error("Error accepting client");
         }
 
-        std::thread client_thread(handleClient, client_sock); // Create a new thread for each client
-        client_thread.detach();                               // Detach the thread so it can run independently
+        std::thread client_thread(handleClient, client_sock, ui); // Create a new thread for each client
+        client_thread.detach();                                   // Detach the thread so it can run independently
     }
 
     closeSocket(sock);
