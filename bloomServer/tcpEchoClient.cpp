@@ -8,16 +8,16 @@
 
 using namespace std;
 
+const char *ip_address = "127.0.0.1";
+const int port_no = 5555;
+
 int main()
 {
-    const char *ip_address = "127.0.0.1";
-    const int port_no = 5555;
-
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-
     if (sock < 0)
     {
         perror("error creating socket");
+        return 1;
     }
 
     struct sockaddr_in sin;
@@ -29,32 +29,64 @@ int main()
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) < 0)
     {
         perror("error connecting to server");
+        close(sock);
+        return 1;
     }
 
-    char data_addr[] = "I'm a message";
-    int data_len = strlen(data_addr);
-    int sent_bytes = send(sock, data_addr, data_len, 0);
-
-    if (sent_bytes < 0)
-    {
-        // error
-    }
-
+    char data_addr[4096];
     char buffer[4096];
-    int expected_data_len = sizeof(buffer);
-    int read_bytes = recv(sock, buffer, expected_data_len, 0);
+    int data_len = strlen(data_addr);
 
-    if (read_bytes == 0)
+    while (true)
     {
-        // connection is closed
-    }
-    else if (read_bytes < 0)
-    {
-        // error
-    }
-    else
-    {
-        cout << buffer;
+        cout << "\nMenu:\n1. Continue\n2. Close Socket\nChoose option: ";
+        if (fgets(data_addr, sizeof(data_addr), stdin) == NULL)
+        {
+            perror("error reading user input");
+            close(sock);
+            return 1;
+        } // Check if user wants to quit
+        if (strcmp(data_addr, "quit") == 0)
+        {
+            cout << "Exiting...\n";
+            break;
+        }
+        data_len = strlen(data_addr);
+        int sent_bytes = send(sock, data_addr, data_len, 0);
+        if (sent_bytes < 0)
+        {
+            perror("error sending data");
+            close(sock);
+            return 1;
+        }
+
+        int expected_data_len = sizeof(buffer);
+        int read_bytes = recv(sock, buffer, expected_data_len - 1, 0);
+        buffer[read_bytes] = '\0'; // Null-terminate the received data
+        cout << "received " << buffer << endl;
+
+        if (read_bytes == 0)
+        {
+            cout << "Connection closed by server222222\n";
+            close(sock);
+            return 0;
+        }
+        if (strcmp(buffer, "bye") == 0)
+        {
+            cout << "Connection closed by server\n";
+            close(sock);
+            return 0;
+        }
+        else if (read_bytes < 0)
+        {
+            perror("error receiving data");
+            close(sock);
+            return 1;
+        }
+        else
+        {
+            cout << buffer << endl;
+        }
     }
 
     close(sock);
