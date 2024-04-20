@@ -53,42 +53,46 @@ BloomFilter UserInterection::initializeBloomFilter(const vector<string> &tokens)
 }
 
 // Function to process commands based on the tokens
-void UserInterection::processCommand(BloomFilter &bfilt, const vector<string> &tokens)
+std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<string> &tokens)
 {
     // Return if tokens are empty
     if (tokens.empty())
-        return;
+        return "bad";
 
     // Add URL to BloomFilter if command is '1'
     if (tokens[0] == "1" && tokens.size() == 2)
     {
         bfilt.addUrl(tokens[1]);
+        return "";
     }
     else
     {
         // Check if URL exists in BloomFilter if command is '2'
         if (tokens[0] == "2" && tokens.size() == 2)
         {
-            cout << bfilt.isUrlExist(tokens[1]) << endl;
+            return bfilt.isUrlExist(tokens[1]);
         }
     }
+    return "";
 }
 
-int UserInterection::InputCommand(char *input)
+std::string UserInterection::InputCommand(char *input)
 {
     vector<string> tokens = stream(input);
 
     InputInspector input2(tokens);
 
     // Initialize BloomFilter on first input
+
     if (flag == 0 && input2.isFirstInput())
     {
         flag = 1;
         bfilt = initializeBloomFilter(tokens);
+        return "";
     }
     else
     {
         // Process commands for subsequent inputs
-        processCommand(bfilt, tokens);
+        return processCommand(bfilt, tokens);
     }
 }

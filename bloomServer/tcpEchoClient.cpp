@@ -39,7 +39,6 @@ int main()
 
     while (true)
     {
-        cout << "\nMenu:\n1. Continue\n2. Close Socket\nChoose option: ";
         if (fgets(data_addr, sizeof(data_addr), stdin) == NULL)
         {
             perror("error reading user input");
@@ -63,7 +62,6 @@ int main()
         int expected_data_len = sizeof(buffer);
         int read_bytes = recv(sock, buffer, expected_data_len - 1, 0);
         buffer[read_bytes] = '\0'; // Null-terminate the received data
-        cout << "received " << buffer << endl;
 
         if (read_bytes == 0)
         {
@@ -85,7 +83,10 @@ int main()
         }
         else
         {
-            cout << buffer << endl;
+            if (strcmp(buffer, "done") != 0)
+            {
+                cout << buffer << endl;
+            }
         }
     }
 

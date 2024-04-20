@@ -88,15 +88,25 @@ void handleClient(int client_sock, UserInterection ui)
         {
             buffer[read_bytes] = '\0'; // Null-terminate the received data
 
-            std::cout << "what is the command to execute" << buffer << std::endl;
+            std::cout << "what is the command to execute: " << buffer << std::endl;
             // todo send to bloom filter and receive response from it
-            int response = ui.InputCommand(buffer);
+            std::string response = ui.InputCommand(buffer);
 
-            if (response == 0)
+            if (response == "bad")
             {
+
                 std::cout << "Invalid option received from client.\n";
                 // todo return error message to client
             }
+
+            if (response.empty())
+            {
+                cout << "empty" << std::endl;
+                response = "done";
+            }
+
+            const char *response_data = response.c_str();
+            sendData(client_sock, response_data);
         }
     }
 }

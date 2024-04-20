@@ -45,6 +45,7 @@ bool InputInspector::isFirstInput()
     // Check if the input size is less than or equal to 1, return false if so.
     if (input.size() <= 1)
     {
+        cout << "bad 1" << endl;
         return false;
     }
 
@@ -55,6 +56,7 @@ bool InputInspector::isFirstInput()
         {
             if (!isPositiveInteger(input[i]) || input.size() == 1)
             {
+                cout << "bad 2" << endl;
                 return false;
             }
         }
@@ -63,6 +65,7 @@ bool InputInspector::isFirstInput()
             // For other elements, check if they are legal digits ('1' or '2') and positive integers.
             if (!isLegalDigit(input[i]) || !isPositiveInteger(input[i]))
             {
+                cout << "bad 3--" << input[i] << "--" << endl;
                 return false;
             }
         }

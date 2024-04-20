@@ -24,11 +24,11 @@ public:
     BloomFilter initializeBloomFilter(const std::vector<std::string> &data);
 
     // Method to process commands based on the tokens
-    void processCommand(BloomFilter &filter, const std::vector<std::string> &command);
+    std::string processCommand(BloomFilter &filter, const std::vector<std::string> &command);
 
     // Method to run the UserInteraction process
     int run();
-    int InputCommand(char *input);
+    std::string InputCommand(char *input);
 };
 
 // End of the include guard
