@@ -59,6 +59,6 @@ function getLink(content) {
 const content =
   "Check out this website www.example.com or you can also visit https://www.another-example.org.";
 const links = getLink(content);
-checkServer("2 " + links[0]);
 
+checkServer("1 machin");
 console.log(links);

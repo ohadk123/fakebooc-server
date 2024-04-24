@@ -18,7 +18,7 @@ public:
     UserInterection();
 
     // Method to split a string into a vector of strings (tokens)
-    vector<string> stream(const std::string &input);
+    vector<string> stream(char *input);
 
     // Method to initialize a BloomFilter with given tokens
     BloomFilter initializeBloomFilter(const std::vector<std::string> &data);
