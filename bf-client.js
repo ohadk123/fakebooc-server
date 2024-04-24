@@ -29,4 +29,16 @@ async function checkServer(message) {
   });
 }
 
+function getLink(content) {
+  // Define the regex pattern for URLs
+  const regex =
+    /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|(([^\s()<>]+|(([^\s()<>]+)))))+(?:(([^\s()<>]+|(([^\s()<>]+))))|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi;
+
+  // Use the regex to find matches in the content
+  const matches = content.match(regex);
+
+  // Return the matches or an empty array if no matches are found
+  return matches || [];
+}
+
 export default checkServer;
