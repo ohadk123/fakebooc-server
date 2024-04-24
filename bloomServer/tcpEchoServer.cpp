@@ -84,6 +84,7 @@ void handleClient(int client_sock, UserInterection ui)
             std::cout << "Client disconnected\n";
             break;
         }
+
         else
         {
             buffer[read_bytes] = '\0'; // Null-terminate the received data
@@ -113,8 +114,8 @@ void handleClient(int client_sock, UserInterection ui)
 
 int main()
 {
-    int sock = createSocket();
 
+    int sock = createSocket();
     struct sockaddr_in sin;
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
@@ -124,6 +125,7 @@ int main()
     bindSocket(sock, sin);
     listenToSocket(sock);
     UserInterection ui;
+
 
     while (true)
     {
@@ -137,6 +139,7 @@ int main()
 
         std::thread client_thread(handleClient, client_sock, ui); // Create a new thread for each client
         client_thread.detach();                                   // Detach the thread so it can run independently
+    
     }
 
     closeSocket(sock);
