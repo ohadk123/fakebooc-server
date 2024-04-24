@@ -12,8 +12,6 @@ import getErrorJson from "./error.js";
  *      400, "Post must have some content" - If text content is null
  */
 async function addPost(uploader, content, contentImage) {
-    //clientsocket bloomfilter .connect send content
-    //  www.all.all 
     if (!content && !contentImage)
         return getErrorJson(400, ["Post must have some content"]);
 
