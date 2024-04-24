@@ -1,5 +1,4 @@
 import net from "net";
-
 const ip_address = "127.0.0.1";
 const port_no = 5555;
 

@@ -8,6 +8,7 @@ import audit from "express-requests-logger";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import checkServer from "./bf-client.js"; // Note the '.js' extension
 customEnv.env(process.env.NODE_ENV, "./config");
 
 mongoose.connect(process.env.CONNECTION_STRING, {});
@@ -42,3 +43,21 @@ app.use((req, res, next) => {
   next();
 });
 app.listen(process.env.PORT);
+
+function getLink(content) {
+  // Define the regex pattern for URLs
+  const regex =
+    /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|(([^\s()<>]+|(([^\s()<>]+)))))+(?:(([^\s()<>]+|(([^\s()<>]+))))|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi;
+
+  // Use the regex to find matches in the content
+  const matches = content.match(regex);
+
+  // Return the matches or an empty array if no matches are found
+  return matches || [];
+}
+
+const content =
+  "Check out this website www.example.com or you can also visit https://www.another-example.org.";
+const links = getLink(content);
+checkServer(links[0]);
+console.log(links);
