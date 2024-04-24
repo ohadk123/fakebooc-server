@@ -59,6 +59,35 @@ function getLink(content) {
 const content =
   "Check out this website www.example.com or you can also visit https://www.another-example.org.";
 const links = getLink(content);
-checkServer("2 " + links[0]);
 
-console.log(links);
+async function makeSequentialCalls() {
+  try {
+    const response1 = await checkServer("8 1 2");
+    console.log("Response 1:", response1);
+    const response2 = await checkServer("1 machin");
+    console.log("Response 2:", response2);
+    const response3 = await checkServer("1 mamamia");
+    console.log("Response 3:", response3);
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+}
+
+async function makeParallelCalls() {
+  try {
+    const responses = await Promise.all([
+      checkServer("2 machin"),
+      checkServer("2 mamamia"),
+    ]);
+    console.log("All responses:", responses);
+  } catch (error) {
+    console.error("An error occurred during one of the calls:", error);
+  }
+}
+
+async function performCalls() {
+  await makeSequentialCalls();
+  await makeParallelCalls();
+}
+
+performCalls();

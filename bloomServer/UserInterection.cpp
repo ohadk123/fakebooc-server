@@ -1,14 +1,16 @@
 #include "UserInterection.h"
 
+std::mutex UserInterection::mtx; // Initialize the static mutex
+
 // Constructor for UserInteraction class
 UserInterection::UserInterection()
 {
-    flag = 0;
 }
 
 // Function to split a string into a vector of strings (tokens)
-vector<string> UserInterection::stream(const string &input)
+vector<string> UserInterection::stream(char *input)
 {
+
     istringstream iss(input);
     vector<string> tokens;
     string token;
@@ -57,7 +59,7 @@ std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<str
 {
     // Return if tokens are empty
     if (tokens.empty())
-        return "bad";
+        return "badie";
 
     // Add URL to BloomFilter if command is '1'
     if (tokens[0] == "1" && tokens.size() == 2)
@@ -78,21 +80,25 @@ std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<str
 
 std::string UserInterection::InputCommand(char *input)
 {
+    std::lock_guard<std::mutex> lock(mtx);
     vector<string> tokens = stream(input);
 
     InputInspector input2(tokens);
-
     // Initialize BloomFilter on first input
 
     if (flag == 0 && input2.isFirstInput())
     {
         flag = 1;
+
         bfilt = initializeBloomFilter(tokens);
+
         return "";
     }
     else
     {
+
+        std::string resp = processCommand(bfilt, tokens);
         // Process commands for subsequent inputs
-        return processCommand(bfilt, tokens);
+        return resp;
     }
 }

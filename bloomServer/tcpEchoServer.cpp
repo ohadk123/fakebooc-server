@@ -65,56 +65,54 @@ void closeSocket(int sock)
         error("Error closing socket");
 }
 
-void handleClient(int client_sock, UserInterection ui)
+void doQuit()
+{
+    exit(0);
+}
+void handleClient(int client_sock, UserInterection &ui)
 {
     char buffer[BUFFER_SIZE];
-    int response;
-    int read_bytes;
-
     while (true)
     {
-        read_bytes = recv(client_sock, buffer, BUFFER_SIZE - 1, 0);
+        memset(buffer, 0, BUFFER_SIZE); // Clear buffer at the start of the loop
+        int read_bytes = recv(client_sock, buffer, BUFFER_SIZE - 1, 0);
+
+        cout << "received command  read bytes: " << read_bytes << "and buffer is :---&" << buffer << "&----" << endl;
 
         if (read_bytes < 0)
         {
-            error("Error receiving data from client");
+            perror("Error receiving data from client");
+            break;
         }
         else if (read_bytes == 0)
         {
-            std::cout << "Client disconnected\n";
-            break;
-        }
-
-        else
-        {
             buffer[read_bytes] = '\0'; // Null-terminate the received data
 
-            std::cout << "what is the command to execute: " << buffer << std::endl;
-            // todo send to bloom filter and receive response from it
-            std::string response = ui.InputCommand(buffer);
-
-            if (response == "bad")
-            {
-
-                std::cout << "Invalid option received from client.\n";
-                // todo return error message to client
-            }
-
-            if (response.empty())
-            {
-                cout << "empty" << std::endl;
-                response = "done";
-            }
-
-            const char *response_data = response.c_str();
-            sendData(client_sock, response_data);
+            sendData(client_sock, "quit done");
+            closeSocket(client_sock);
+            return;
         }
+        buffer[read_bytes] = '\0'; // Null-terminate the received data
+
+        if (strcmp(buffer, "quit") == 0)
+        {
+            std::cout << "Client disconnected empty\n";
+            sendData(client_sock, "quit");
+            closeSocket(client_sock);
+            return;
+        }
+        std::string commandResponse = ui.InputCommand(buffer);
+        if (commandResponse.empty())
+        {
+            commandResponse = "No response generated";
+        }
+        sendData(client_sock, commandResponse.c_str());
     }
+    closeSocket(client_sock);
 }
 
 int main()
 {
-
     int sock = createSocket();
     struct sockaddr_in sin;
     memset(&sin, 0, sizeof(sin));
@@ -124,11 +122,12 @@ int main()
 
     bindSocket(sock, sin);
     listenToSocket(sock);
-    UserInterection ui;
 
+    UserInterection ui; // Single instance for all threads
 
     while (true)
     {
+       
         struct sockaddr_in client_sin;
         unsigned int addr_len = sizeof(client_sin);
         int client_sock = accept(sock, (struct sockaddr *)&client_sin, &addr_len);
@@ -137,9 +136,8 @@ int main()
             error("Error accepting client");
         }
 
-        std::thread client_thread(handleClient, client_sock, ui); // Create a new thread for each client
-        client_thread.detach();                                   // Detach the thread so it can run independently
-    
+        std::thread client_thread(handleClient, client_sock, std::ref(ui)); // Pass ui by reference
+        client_thread.detach();                                             // Detach the thread so it can run independently
     }
 
     closeSocket(sock);

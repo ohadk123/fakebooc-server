@@ -2,10 +2,10 @@ import net from "net";
 const ip_address = "127.0.0.1";
 const port_no = 5555;
 
-// Function that establishes a TCP connection and sends a message
 async function checkServer(message) {
   return new Promise((resolve, reject) => {
     const client = new net.Socket();
+    let isResponseReceived = false; // Flag to check if response has been received
 
     client.connect(port_no, ip_address, () => {
       console.log("Connected to server.");
@@ -14,17 +14,23 @@ async function checkServer(message) {
 
     client.on("data", (data) => {
       console.log("Received: " + data);
-      client.destroy(); // close connection after receiving the response
+      isResponseReceived = true; // Set the flag as response is received
+      //   client.end(); // Close connection after receiving the response
+      client.destroy();
       resolve(data.toString().trim()); // Resolve with the received data
     });
 
     client.on("close", () => {
       console.log("Connection closed.");
+      if (!isResponseReceived) {
+        // Only reject if no response has been received
+        reject(new Error("Connection closed prematurely"));
+      }
     });
 
     client.on("error", (err) => {
       console.error("Error: " + err.message);
-      reject(err);
+      reject(err); // Reject on actual error
     });
   });
 }

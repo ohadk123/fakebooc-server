@@ -42,6 +42,7 @@ bool InputInspector::isPositiveInteger(const string &s)
 // Function to check if the first input in the vector is valid.
 bool InputInspector::isFirstInput()
 {
+
     // Check if the input size is less than or equal to 1, return false if so.
     if (input.size() <= 1)
     {
