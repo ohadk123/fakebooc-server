@@ -15,15 +15,7 @@ public:
     int flag = 0;
 
     UserInterection();
-<<<<<<< HEAD
     vector<string> stream(char *input);
-=======
-
-    // Method to split a string into a vector of strings (tokens)
-    vector<string> stream(char *input);
-
-    // Method to initialize a BloomFilter with given tokens
->>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
     BloomFilter initializeBloomFilter(const std::vector<std::string> &data);
     std::string processCommand(BloomFilter &filter, const std::vector<std::string> &command);
     int run();

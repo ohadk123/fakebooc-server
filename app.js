@@ -60,7 +60,6 @@ const content =
   "Check out this website www.example.com or you can also visit https://www.another-example.org.";
 const links = getLink(content);
 
-<<<<<<< HEAD
 async function makeSequentialCalls() {
   try {
     const response1 = await checkServer("8 1 2");
@@ -92,7 +91,3 @@ async function performCalls() {
 }
 
 performCalls();
-=======
-checkServer("1 machin");
-console.log(links);
->>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
