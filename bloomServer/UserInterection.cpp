@@ -5,12 +5,22 @@ std::mutex UserInterection::mtx; // Initialize the static mutex
 // Constructor for UserInteraction class
 UserInterection::UserInterection()
 {
+<<<<<<< HEAD
+=======
+    flag = 0;
+    char *init = "8 1 2";
+    InputCommand(init);
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
 }
 
 // Function to split a string into a vector of strings (tokens)
 vector<string> UserInterection::stream(char *input)
 {
+<<<<<<< HEAD
 
+=======
+    cout << "pb here?1" << endl;
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
     istringstream iss(input);
     vector<string> tokens;
     string token;
@@ -80,10 +90,19 @@ std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<str
 
 std::string UserInterection::InputCommand(char *input)
 {
+<<<<<<< HEAD
     std::lock_guard<std::mutex> lock(mtx);
-    vector<string> tokens = stream(input);
+=======
 
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
+    vector<string> tokens = stream(input);
+    cout << "pb here?2" << endl;
     InputInspector input2(tokens);
+<<<<<<< HEAD
+=======
+    cout << "pb here?3"
+         << "my flag: " << flag << endl;
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
     // Initialize BloomFilter on first input
 
     if (flag == 0 && input2.isFirstInput())
@@ -96,8 +115,14 @@ std::string UserInterection::InputCommand(char *input)
     }
     else
     {
+<<<<<<< HEAD
 
         std::string resp = processCommand(bfilt, tokens);
+=======
+        cout << "pb here?5" << endl;
+        std::string resp = processCommand(bfilt, tokens);
+        cout << "pb here?6" << endl;
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
         // Process commands for subsequent inputs
         return resp;
     }

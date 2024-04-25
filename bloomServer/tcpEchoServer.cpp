@@ -69,16 +69,25 @@ void doQuit()
 {
     exit(0);
 }
+<<<<<<< HEAD
 void handleClient(int client_sock, UserInterection &ui)
+=======
+void handleClient(int client_sock, UserInterection ui)
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
 {
     char buffer[BUFFER_SIZE];
     while (true)
     {
         memset(buffer, 0, BUFFER_SIZE); // Clear buffer at the start of the loop
+<<<<<<< HEAD
         int read_bytes = recv(client_sock, buffer, BUFFER_SIZE - 1, 0);
 
         cout << "received command  read bytes: " << read_bytes << "and buffer is :---&" << buffer << "&----" << endl;
 
+=======
+        read_bytes = recv(client_sock, buffer, BUFFER_SIZE - 1, 0);
+        cout << "lets see read_bytes: " << read_bytes << " and buffer: " << buffer << " and len is : " << endl;
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
         if (read_bytes < 0)
         {
             perror("Error receiving data from client");
@@ -88,9 +97,40 @@ void handleClient(int client_sock, UserInterection &ui)
         {
             buffer[read_bytes] = '\0'; // Null-terminate the received data
 
+<<<<<<< HEAD
             sendData(client_sock, "quit done");
             closeSocket(client_sock);
             return;
+=======
+            std::cout << "what is the command to execute: " << buffer << "---" << std::endl;
+
+            std::cout << strcmp(buffer, "quit") << buffer << std::endl;
+            if (strcmp(buffer, "quit") == 0)
+            {
+                std::cout << "its in baby... " << buffer << std::endl;
+                doQuit();
+            }
+            // todo send to bloom filter and receive response from it
+            std::string response = ui.InputCommand(buffer);
+            cout << "pb here?1212" << endl;
+            if (response == "bad")
+            {
+
+                std::cout << "Invalid option received from client.\n";
+                // todo return error message to client
+            }
+
+            if (response.empty())
+            {
+                cout << "empty" << std::endl;
+                response = "done";
+            }
+
+            const char *response_data = response.c_str();
+            cout << "pb here?18" << endl;
+            sendData(client_sock, response_data);
+            cout << "pb here?19" << endl;
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
         }
         buffer[read_bytes] = '\0'; // Null-terminate the received data
 
@@ -122,8 +162,21 @@ int main()
 
     bindSocket(sock, sin);
     listenToSocket(sock);
+<<<<<<< HEAD
 
     UserInterection ui; // Single instance for all threads
+=======
+
+    std::string resp;
+    UserInterection ui;
+
+    // resp = ui.InputCommand("8 1 2");
+    // cout << resp << endl;
+    // resp = ui.InputCommand("1 mamamia");
+    // cout << resp << endl;
+    // resp = ui.InputCommand("2 mamamia");
+    // cout << resp << endl;
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
 
     while (true)
     {
@@ -136,10 +189,18 @@ int main()
             error("Error accepting client");
         }
 
+<<<<<<< HEAD
         std::thread client_thread(handleClient, client_sock, std::ref(ui)); // Pass ui by reference
         client_thread.detach();                                             // Detach the thread so it can run independently
+=======
+        std::thread client_thread(handleClient, client_sock, ui); // Create a new thread for each client
+        client_thread.detach();
+
+        // Detach the thread so it can run independently
+>>>>>>> 060615be59fbe5ae3463062cd3a317ca0e5bf1a1
     }
 
     closeSocket(sock);
+
     return 0;
 }
