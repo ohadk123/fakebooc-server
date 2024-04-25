@@ -7,22 +7,24 @@
 #include <functional>
 #include <unordered_set>
 #include <tuple>
+#include <mutex>
+
 using namespace std;
 
 // Define the BloomFilter class
 class BloomFilter
 {
 private:
-    std::vector<bool> filter;      // Vector of bools to represent the filter
-    std::vector<std::string> list; // Vector of URLs
+    std::vector<bool> filter;       // Vector of bools to represent the filter
+    std::vector<std::string> list;  // Vector of URLs
     std::hash<std::string> hashFun; // Hash function for string processing
 
 public:
-    int size; // Size of the Bloom filter
+    int size;                     // Size of the Bloom filter
     std::vector<int> hashFilters; // Vector to store hash values for filtering
 
     // Constructors
-    BloomFilter(); // Default constructor
+    BloomFilter();                             // Default constructor
     BloomFilter(const std::vector<int> &data); // Constructor with data initialization
 
     // Member functions

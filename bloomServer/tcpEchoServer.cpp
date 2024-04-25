@@ -61,6 +61,7 @@ void sendData(int client_sock, const char *data)
 
 void closeSocket(int sock)
 {
+    cout << "socket " << sock << " closed" << endl;
     if (close(sock) < 0)
         error("Error closing socket");
 }
@@ -72,42 +73,38 @@ void doQuit()
 void handleClient(int client_sock, UserInterection &ui)
 {
     char buffer[BUFFER_SIZE];
-    while (true)
+    int read_bytes;
+
+    while ((read_bytes = recv(client_sock, buffer, BUFFER_SIZE - 1, 0)) > 0)
     {
-        memset(buffer, 0, BUFFER_SIZE); // Clear buffer at the start of the loop
-        int read_bytes = recv(client_sock, buffer, BUFFER_SIZE - 1, 0);
-
-        cout << "received command  read bytes: " << read_bytes << "and buffer is :---&" << buffer << "&----" << endl;
-
-        if (read_bytes < 0)
-        {
-            perror("Error receiving data from client");
-            break;
-        }
-        else if (read_bytes == 0)
-        {
-            buffer[read_bytes] = '\0'; // Null-terminate the received data
-
-            sendData(client_sock, "quit done");
-            closeSocket(client_sock);
-            return;
-        }
         buffer[read_bytes] = '\0'; // Null-terminate the received data
+        cout << "Received command: " << buffer << endl;
 
         if (strcmp(buffer, "quit") == 0)
         {
-            std::cout << "Client disconnected empty\n";
-            sendData(client_sock, "quit");
-            closeSocket(client_sock);
-            return;
+            cout << "Client requested to disconnect." << endl;
+            break; // Exit loop and close connection
         }
         std::string commandResponse = ui.InputCommand(buffer);
         if (commandResponse.empty())
         {
             commandResponse = "No response generated";
         }
+
         sendData(client_sock, commandResponse.c_str());
     }
+
+    if (read_bytes == 0)
+    {
+        // Client closed connection gracefully
+        cout << "Client disconnected, closing connection." << endl;
+    }
+    else if (read_bytes < 0)
+    {
+        // Error receiving data
+        perror("Error receiving data from client");
+    }
+
     closeSocket(client_sock);
 }
 
@@ -127,7 +124,7 @@ int main()
 
     while (true)
     {
-       
+
         struct sockaddr_in client_sin;
         unsigned int addr_len = sizeof(client_sin);
         int client_sock = accept(sock, (struct sockaddr *)&client_sin, &addr_len);
@@ -135,9 +132,9 @@ int main()
         {
             error("Error accepting client");
         }
-
+        cout << "new socket? " << client_sock << endl;
         std::thread client_thread(handleClient, client_sock, std::ref(ui)); // Pass ui by reference
-        client_thread.detach();                                             // Detach the thread so it can run independently
+        client_thread.detach();
     }
 
     closeSocket(sock);

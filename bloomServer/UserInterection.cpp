@@ -21,10 +21,22 @@ vector<string> UserInterection::stream(char *input)
     }
     return tokens;
 }
-
+int safe_stoi(const string &str)
+{
+    try
+    {
+        return std::stoi(str);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Conversion error: " << e.what() << '\n';
+        return 0; // Or handle the error in a way that fits your application logic
+    }
+}
 // Function to initialize a BloomFilter with given tokens
 BloomFilter UserInterection::initializeBloomFilter(const vector<string> &tokens)
 {
+
     // Check if tokens size is less than 2, return an empty BloomFilter
     if (tokens.size() < 2)
     {
@@ -57,6 +69,7 @@ BloomFilter UserInterection::initializeBloomFilter(const vector<string> &tokens)
 // Function to process commands based on the tokens
 std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<string> &tokens)
 {
+
     // Return if tokens are empty
     if (tokens.empty())
         return "badie";
@@ -65,7 +78,7 @@ std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<str
     if (tokens[0] == "1" && tokens.size() == 2)
     {
         bfilt.addUrl(tokens[1]);
-        return "";
+        return "addUrl";
     }
     else
     {
@@ -80,25 +93,24 @@ std::string UserInterection::processCommand(BloomFilter &bfilt, const vector<str
 
 std::string UserInterection::InputCommand(char *input)
 {
-    std::lock_guard<std::mutex> lock(mtx);
-    vector<string> tokens = stream(input);
 
+    std::lock_guard<std::mutex> lock(mtx);
+
+    vector<string> tokens = stream(input);
     InputInspector input2(tokens);
     // Initialize BloomFilter on first input
 
     if (flag == 0 && input2.isFirstInput())
     {
         flag = 1;
-
         bfilt = initializeBloomFilter(tokens);
-
+        cout << "BloomFilter initialized and size is " << bfilt.size << endl;
         return "";
     }
     else
     {
 
-        std::string resp = processCommand(bfilt, tokens);
+        return processCommand(bfilt, tokens);
         // Process commands for subsequent inputs
-        return resp;
     }
 }

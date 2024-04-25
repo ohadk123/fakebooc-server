@@ -13,16 +13,17 @@ async function checkServer(message) {
     });
 
     client.on("data", (data) => {
-      console.log("Received: " + data);
+      // console.log("Received: " + data);
       isResponseReceived = true; // Set the flag as response is received
-      //   client.end(); // Close connection after receiving the response
-      client.destroy();
+      // client.end(); // Close connection after receiving the response
       resolve(data.toString().trim()); // Resolve with the received data
+      client.destroy();
     });
 
     client.on("close", () => {
       console.log("Connection closed.");
       if (!isResponseReceived) {
+        console.log("ERROR IN " + message);
         // Only reject if no response has been received
         reject(new Error("Connection closed prematurely"));
       }
@@ -46,5 +47,16 @@ function getLink(content) {
   // Return the matches or an empty array if no matches are found
   return matches || [];
 }
+async function makeParallelCalls(links) {
+  try {
+    const responses = await Promise.all(
+      links.map((link) => checkServer("2 " + link))
+    );
+    console.log("All responses:", responses);
+  } catch (error) {
+    console.error("An error occurred during one of the calls:", error);
+  }
+}
 
-export default checkServer;
+// Exporting functions
+export { checkServer, getLink, makeParallelCalls };

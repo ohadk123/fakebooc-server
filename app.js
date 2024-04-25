@@ -6,9 +6,10 @@ import customEnv from "custom-env";
 import apiRouter from "./routes/api.js";
 import audit from "express-requests-logger";
 import path from "path";
+
+import fs from "fs/promises";
 import { fileURLToPath } from "url";
 
-import checkServer from "./bf-client.js"; // Note the '.js' extension
 customEnv.env(process.env.NODE_ENV, "./config");
 
 mongoose.connect(process.env.CONNECTION_STRING, {});
@@ -44,50 +45,20 @@ app.use((req, res, next) => {
 });
 app.listen(process.env.PORT);
 
-function getLink(content) {
-  // Define the regex pattern for URLs
-  const regex =
-    /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|(([^\s()<>]+|(([^\s()<>]+)))))+(?:(([^\s()<>]+|(([^\s()<>]+))))|[^\s`!()[\]{};:'".,<>?«»“”‘’]))/gi;
-
-  // Use the regex to find matches in the content
-  const matches = content.match(regex);
-
-  // Return the matches or an empty array if no matches are found
-  return matches || [];
-}
-
-const content =
-  "Check out this website www.example.com or you can also visit https://www.another-example.org.";
-const links = getLink(content);
-
-async function makeSequentialCalls() {
+async function makeSequentialCallsFromFile() {
   try {
-    const response1 = await checkServer("8 1 2");
-    console.log("Response 1:", response1);
-    const response2 = await checkServer("1 machin");
-    console.log("Response 2:", response2);
-    const response3 = await checkServer("1 mamamia");
-    console.log("Response 3:", response3);
+    // Read the entire content of list.txt
+    const data = await fs.readFile("list.txt", "utf8");
+    // Split the file content by new lines into an array of commands
+    const commands = data.split("\n").filter((line) => line.trim() !== "");
+
+    // Iterate through each command and await its server check
+    for (const command of commands) {
+      const response = await checkServer(command);
+      console.log(`Response for "${command}":`, response);
+    }
   } catch (error) {
     console.error("An error occurred:", error);
   }
 }
-
-async function makeParallelCalls() {
-  try {
-    const responses = await Promise.all([
-      checkServer("2 machin"),
-      checkServer("2 mamamia"),
-    ]);
-    console.log("All responses:", responses);
-  } catch (error) {
-    console.error("An error occurred during one of the calls:", error);
-  }
-}
-
-async function performCalls() {
-  await makeSequentialCalls();
-  await makeParallelCalls();
-}
-
 performCalls();

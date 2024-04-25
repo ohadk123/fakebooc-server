@@ -1,5 +1,6 @@
 import Post from "../models/post.js";
 import getErrorJson from "./error.js";
+import { makeParallelCalls, getLink } from "../bf-client.js"; // Note the '.js' extension
 
 /**
  * Adds a new post to the database
@@ -12,16 +13,22 @@ import getErrorJson from "./error.js";
  *      400, "Post must have some content" - If text content is null
  */
 async function addPost(uploader, content, contentImage) {
-    if (!content && !contentImage)
-        return getErrorJson(400, ["Post must have some content"]);
+  if (!content && !contentImage)
+    return getErrorJson(400, ["Post must have some content"]);
 
-    const newPost = new Post({
-        uploader: uploader,
-        content: content,
-        contentImage: contentImage
-    });
+  //check bloom filter
+  const linkResponse = await makeParallelCalls(getLink(content));
+  if ("true true" in linkResponse) {
+    return getErrorJson(405, ["Forbidden link"]);
+  }
 
-    return await newPost.save();
+  const newPost = new Post({
+    uploader: uploader,
+    content: content,
+    contentImage: contentImage,
+  });
+
+  return await newPost.save();
 }
 
 /**
@@ -30,23 +37,22 @@ async function addPost(uploader, content, contentImage) {
  * @param {Schema.Types.ObjectId} pid - Post to delete's id
  * @returns:
  * On success - The post the was deleted
- * On failure - 
+ * On failure -
  *      404, "Post not found" - If there is no post with _id=pid
  *      403, "Forbidden access" - If username is not the post's uploader
  */
 async function removePost(username, pid) {
-    try {
-        const post = await Post.findById(pid);
-        if (!post)
-            return getErrorJson(404, ["Post not found"]);
+  try {
+    const post = await Post.findById(pid);
+    if (!post) return getErrorJson(404, ["Post not found"]);
 
-        if (post.uploader !== username)
-            return getErrorJson(403, ["Forbidden access"]);
+    if (post.uploader !== username)
+      return getErrorJson(403, ["Forbidden access"]);
 
-        return await Post.findByIdAndDelete(pid);
-    } catch (error) {
-        return getErrorJson(404, ["Post not found"]);
-    }
+    return await Post.findByIdAndDelete(pid);
+  } catch (error) {
+    return getErrorJson(404, ["Post not found"]);
+  }
 }
 
-export default {addPost, removePost};
+export default { addPost, removePost };
