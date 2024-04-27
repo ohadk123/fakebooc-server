@@ -53,6 +53,7 @@ async function makeParallelCalls(links) {
       links.map((link) => checkServer("2 " + link))
     );
     console.log("All responses:", responses);
+    return responses;
   } catch (error) {
     console.error("An error occurred during one of the calls:", error);
   }

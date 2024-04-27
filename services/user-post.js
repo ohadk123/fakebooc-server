@@ -18,7 +18,7 @@ async function addPost(uploader, content, contentImage) {
 
   //check bloom filter
   const linkResponse = await makeParallelCalls(getLink(content));
-  if ("true true" in linkResponse) {
+  if (linkResponse.includes("true true")) {
     return getErrorJson(405, ["Forbidden link"]);
   }
 
