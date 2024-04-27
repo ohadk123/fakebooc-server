@@ -16,15 +16,18 @@ import { makeParallelCalls, getLink } from "../bf-client.js"; // Note the '.js' 
 async function updatePost(loggedUsername, pid, newContent, newContentImage) {
   try {
     const post = await Post.findById(pid);
+
     if (!post) return getErrorJson(404, ["Post not found"]);
 
     if (post.uploader !== loggedUsername)
       return getErrorJson(403, ["Forbidden access"]);
 
-    const linkResponse = await makeParallelCalls(getLink(content));
+    const linkResponse = await makeParallelCalls(getLink(newContent));
+
     if (linkResponse.includes("true true")) {
       return getErrorJson(405, ["Forbidden link"]);
     }
+
     let content = post.content;
     let contentImage = post.contentImage;
     if (newContent) content = newContent;
