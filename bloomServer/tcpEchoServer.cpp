@@ -61,7 +61,6 @@ void sendData(int client_sock, const char *data)
 
 void closeSocket(int sock)
 {
-    cout << "socket " << sock << " closed" << endl;
     if (close(sock) < 0)
         error("Error closing socket");
 }
@@ -132,7 +131,6 @@ int main()
         {
             error("Error accepting client");
         }
-        cout << "new socket? " << client_sock << endl;
         std::thread client_thread(handleClient, client_sock, std::ref(ui)); // Pass ui by reference
         client_thread.detach();
     }

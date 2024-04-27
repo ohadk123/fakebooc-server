@@ -16,7 +16,6 @@ BloomFilter::BloomFilter(const vector<int> &data)
     std::hash<std::string> hashFun; // Hash function for processing URLs.
     for (int i = 1; i < data.size(); i++)
     {
-        cout << "my hash code" << data[i] << endl;
         hashFilters.push_back(data[i]); // Store hash filters from the input data.
     }
 
@@ -39,8 +38,7 @@ const vector<string> BloomFilter::getUrlList()
 // This involves adding the URL to the list and updating the filter bits using the hash functions.
 void BloomFilter::addUrl(string url)
 {
-    cout << "in add url size is: " << size << endl;
-
+   
     // Create a copy of the existing list
     std::vector<string> newList = list;
 
@@ -53,11 +51,7 @@ void BloomFilter::addUrl(string url)
     // Update the filter for the new URL using the hash functions.
     for (int i = 0; i < hashFilters.size(); i++)
     {
-        cout << "in HF size is: " << hashFilters.size() << endl;
         int index = getUrlHashIndex(hashFilters[i], url);
-
-        cout << "and we put in: " << index << endl;
-
         filter[index] = true;
     }
 }
@@ -66,20 +60,16 @@ void BloomFilter::addUrl(string url)
 int BloomFilter::getUrlHashIndex(int hashType, string url)
 {
     std::size_t hashCode = hashFun(url); // Use size_t to hold hash values
-    std::cout << "Initial hash code: " << hashCode << std::endl;
-
+   
     // Apply hash function repeatedly as specified by hashType
     for (int i = 1; i < hashType; i++)
     {
-        std::cout << "Hash code before re-hash: " << hashCode << std::endl;
         hashCode = hashFun(std::to_string(hashCode)); // Re-hash the hash code
-        std::cout << "Hash code after re-hash: " << hashCode << std::endl;
-    }
+        }
 
     // Calculate the index, ensuring it's non-negative and within the bounds of 'size'
     int index = static_cast<int>(hashCode % size);
-    std::cout << "Final index: " << index << std::endl;
-    return index;
+     return index;
 }
 
 // Checks if a URL is potentially in the blacklist, based on the filter.
