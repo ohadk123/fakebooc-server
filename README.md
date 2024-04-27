@@ -13,7 +13,7 @@ Follow these instructions to get a copy of the FakeBook project up and running o
 
 ### Prerequisites 📋
 
-The server can only be run on Windows.
+The server can only be run on Windows.  
 Before starting, ensure you have the following software installed on your computer:
 - **Node.js**: [Download and install Node.js](https://nodejs.org/), which includes npm (Node Package Manager).
 
