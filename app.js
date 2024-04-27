@@ -6,6 +6,7 @@ import customEnv from "custom-env";
 import apiRouter from "./routes/api.js";
 import audit from "express-requests-logger";
 import path from "path";
+import { checkServer } from "./bf-client.js"; // Note the '.js' extension
 
 import fs from "fs/promises";
 import { fileURLToPath } from "url";
@@ -61,4 +62,4 @@ async function makeSequentialCallsFromFile() {
     console.error("An error occurred:", error);
   }
 }
-performCalls();
+makeSequentialCallsFromFile();
