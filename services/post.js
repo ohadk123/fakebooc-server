@@ -21,12 +21,10 @@ async function updatePost(loggedUsername, pid, newContent, newContentImage) {
     if (post.uploader !== loggedUsername)
       return getErrorJson(403, ["Forbidden access"]);
 
-    //check bloom filter
-    const linkResponse = await makeParallelCalls(getLink(newContent));
-    if ("true true" in linkResponse) {
+    const linkResponse = await makeParallelCalls(getLink(content));
+    if (linkResponse.includes("true true")) {
       return getErrorJson(405, ["Forbidden link"]);
     }
-
     let content = post.content;
     let contentImage = post.contentImage;
     if (newContent) content = newContent;
