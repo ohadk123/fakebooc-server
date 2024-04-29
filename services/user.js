@@ -54,8 +54,10 @@ async function registerUser(
     hasErrors = true;
   } else errors.push("");
 
-  if (cPassword !== password) errors.push("Passwords don't match");
-  else errors.push("");
+  if (cPassword !== password) {
+    errors.push("Passwords don't match");
+    hasErrors = true;
+  } else errors.push("");
 
   if (!displayName) {
     errors.push("Please enter a display name");
@@ -90,7 +92,6 @@ async function getUserInformation(username) {
     friends: user.friends,
     friendReq: user.friendReq,
     profileImage: user.profileImage,
-
   };
 }
 
